@@ -41,8 +41,7 @@ urlpatterns = [
      re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$',
          VerifyEmailView.as_view(), name='account_confirm_email'),
      path("resend-email-confirmation/", ResendEmailVerificationView.as_view(), name ='Resend_verification_email' ),
-    
-    
+
      #docs
      path('playground/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
      path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
