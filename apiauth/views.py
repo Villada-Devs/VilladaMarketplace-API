@@ -1,3 +1,4 @@
+from distutils.log import error
 from allauth.account import app_settings as allauth_settings
 from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailAddress
@@ -40,7 +41,6 @@ sensitive_post_parameters_m = method_decorator(
 #api 
 
 class EventsViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
     """
     GET ver todos los eventos existentes
     """
@@ -50,14 +50,18 @@ class EventsViewSet(viewsets.ViewSet):
         return Response(EventSerializer.data)
 
     """
-    Create view POST pueden postear todos
+    Create view solo pueden hacer POST los admins
     """   
-    def post(self, request, *args, **kwargs):
-        serializer = EventsSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        user_state = request.user.is_staff
+        if user_state == True:
+            serializer = EventsSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
     
     
 
@@ -68,7 +72,6 @@ class EventsViewSet(viewsets.ViewSet):
 
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
-    permission_classes = [IsAuthenticated]
     lookup_field =  "id"
     
     def get_queryset(self):
@@ -76,11 +79,20 @@ class EventsDetailView(RetrieveUpdateDestroyAPIView):
 
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        user_state = request.user.is_staff
+        if user_state == True:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
-
+    def update(self, request, *args, **kwargs):
+        user_state = request.user.is_staff
+        if user_state == True:
+           return super().update(request, *args, **kwargs)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class VerifyEmailView(APIView, ConfirmEmailView):
     permission_classes = (AllowAny,)
