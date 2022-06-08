@@ -15,6 +15,8 @@ from .views import EventsDetailView, EventsViewSet, ResendEmailVerificationView
 from apiauth import views
 from rest_framework import routers
 router = routers.SimpleRouter()
+from django.conf import settings
+from django.conf.urls.static import static
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -54,6 +56,8 @@ urlpatterns = [
      path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     
 ]
+
+
 
 #api urls with router
 
