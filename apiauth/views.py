@@ -8,12 +8,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework import status, viewsets
 from rest_framework.exceptions import MethodNotAllowed
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Event
-from rest_framework.permissions import IsAuthenticated
+from .models import Event,User
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 
 
 #docs
@@ -31,14 +32,9 @@ from dj_rest_auth.views import LoginView
 
 from apiauth.serializers import EventsSerializer
 
-
-
-
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters('password1', 'password2'),
 )
-
-
 
 
 #api 
@@ -50,12 +46,12 @@ class EventsViewSet(viewsets.ViewSet):
     """
     def list(self, request):
         queryset = Event.objects.all()
-        serializer = EventsSerializer(queryset, many=True)
-        return Response(serializer.data)
+        EventSerializer = EventsSerializer(queryset, many=True)
+        return Response(EventSerializer.data)
 
     """
-    POST para postear un nuevo evento
-    """
+    Create view POST pueden postear todos
+    """   
     def post(self, request, *args, **kwargs):
         serializer = EventsSerializer(data = request.data)
         if serializer.is_valid():
@@ -63,9 +59,12 @@ class EventsViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    """
-     GET de un objeto, PUT a un objeto, DELETE a un objeto (PK como parametro)
-    """
+    
+
+"""
+    GET de un objeto, PUT a un objeto, DELETE a un objeto (PK como parametro)
+"""
+
 
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
@@ -80,6 +79,7 @@ class EventsDetailView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class VerifyEmailView(APIView, ConfirmEmailView):

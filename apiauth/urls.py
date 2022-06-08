@@ -48,13 +48,14 @@ urlpatterns = [
     
      #upfapi
      path("events/<int:id>/", EventsDetailView.as_view(), name='Events_detail'),
-
+     
      #jwt token (token and refresh)
+     path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
      path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-  
+    
 ]
 
 #api urls with router
 
-router.register('events', EventsViewSet, basename='EventsModel')
+router.register('events', EventsViewSet, basename='EventsModelGetALL')
 urlpatterns += router.urls
