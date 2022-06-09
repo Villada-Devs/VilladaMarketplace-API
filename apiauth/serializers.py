@@ -38,6 +38,12 @@ class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(required=True, write_only=True)
     password1 = serializers.CharField(required=True, write_only=True)
 
+    def validate_username(self, username):
+        if User.objects.filter(username = username).exists():
+            raise serializers.ValidationError("A user is already registered with this username")
+        return username
+
+
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         domain = email.split('@')[1]
@@ -49,7 +55,8 @@ class RegisterSerializer(serializers.Serializer):
                 raise serializers.ValidationError(
                     _("A user is already registered with this e-mail address."))
         return email
-        
+    
+    
 
     def get_cleaned_data(self):
         return {
@@ -57,6 +64,7 @@ class RegisterSerializer(serializers.Serializer):
             'last_name': self.validated_data.get('last_name', ''),
             'password1': self.validated_data.get('password1', ''),
             'email': self.validated_data.get('email', ''),
+            'username': self.validated_data.get('username','')
         }
 
     def save(self, request):

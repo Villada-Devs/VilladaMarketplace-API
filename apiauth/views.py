@@ -45,12 +45,6 @@ class EventsViewSet(viewsets.ViewSet):
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
     
-    
-
-"""
-    GET de un objeto, PUT a un objeto, DELETE a un objeto (PK como parametro)
-"""
-
 
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
