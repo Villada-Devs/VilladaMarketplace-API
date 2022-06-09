@@ -1,4 +1,5 @@
 #allauth
+from multiprocessing import context
 from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailAddress
 from django.conf import settings
@@ -34,10 +35,11 @@ class EventsViewSet(viewsets.ViewSet):
     """   
     def post(self, request):
         user_state = request.user.is_staff
+        user_id = request.user.id
         if user_state == True:
             serializer = EventsSerializer(data = request.data)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(created_by = self.request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -63,14 +65,15 @@ class EventsDetailView(RetrieveUpdateDestroyAPIView):
         if user_state == True:
             instance = self.get_object()
             self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
     def update(self, request, *args, **kwargs):
         user_state = request.user.is_staff
         if user_state == True:
-           return super().update(request, *args, **kwargs)
+            return super().update(request, *args, **kwargs)
+
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -92,7 +95,6 @@ class VerifyEmailView(APIView, ConfirmEmailView):
         confirmation.confirm(self.request)
         return Response({'detail': _('ok')}, status=status.HTTP_200_OK)
 
-
 class ResendEmailVerificationView(CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ResendEmailVerificationSerializer
@@ -108,5 +110,5 @@ class ResendEmailVerificationView(CreateAPIView):
 
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
 
-#register view override
+
 

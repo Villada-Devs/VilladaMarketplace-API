@@ -16,20 +16,17 @@ from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 import re
-from .models import TokenModel
+
 #UPF API
 
-
 class EventsSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source="create_by.username", read_only=True)
+    author = serializers.CharField(source="created_by.username", read_only=True)
     class Meta:
         model = Event
-        fields = ['id','create_by','author','title', 'body', 'created_date','image', 'event_date']
-
+        fields = ['id','author','title', 'body', 'created_date','image', 'event_date']
+        
 
 # AUTH API
-
-
 #register serializer override
 class RegisterSerializer(serializers.Serializer):
     """
@@ -44,7 +41,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         domain = email.split('@')[1]
-        if not domain == 'gmail.com':
+        if not domain == 'itsv.edu.ar':
             raise serializers.ValidationError('The email must be from itsv.edu.ar domain')
 
         if allauth_settings.UNIQUE_EMAIL:
