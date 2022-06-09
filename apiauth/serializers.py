@@ -1,10 +1,7 @@
 from venv import create
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.forms import SetPasswordForm, PasswordResetForm
 from django.urls import exceptions as url_exceptions
-from django.utils.encoding import force_str
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.exceptions import ValidationError
@@ -19,7 +16,7 @@ from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 import re
-
+from .models import TokenModel
 #UPF API
 
 
@@ -28,19 +25,6 @@ class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id','create_by','author','title', 'body', 'created_date','image', 'event_date']
-
-
-
-if 'allauth' in settings.INSTALLED_APPS:
-    from .forms import AllAuthPasswordResetForm
-
-from .models import TokenModel
-
-# Get the UserModel
-UserModel = get_user_model()
-
-
-
 
 
 # AUTH API
@@ -60,7 +44,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         domain = email.split('@')[1]
-        if not domain == 'itsv.edu.ar':
+        if not domain == 'gmail.com':
             raise serializers.ValidationError('The email must be from itsv.edu.ar domain')
 
         if allauth_settings.UNIQUE_EMAIL:

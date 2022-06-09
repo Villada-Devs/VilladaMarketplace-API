@@ -1,41 +1,21 @@
-from distutils.log import error
-from allauth.account import app_settings as allauth_settings
+#allauth
 from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailAddress
-from allauth.socialaccount import signals
 from django.conf import settings
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework import status, viewsets
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Event,User
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
-
-
-#docs
-
-from dj_rest_auth.app_settings import (
-    JWTSerializer, TokenSerializer, create_token,
-)
-from dj_rest_auth.models import TokenModel
+from .models import Event
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from dj_rest_auth.registration.serializers import (
-    SocialAccountSerializer, SocialConnectSerializer, SocialLoginSerializer,
     VerifyEmailSerializer, ResendEmailVerificationSerializer
 )
-from dj_rest_auth.utils import jwt_encode
 from dj_rest_auth.views import LoginView
-
 from apiauth.serializers import EventsSerializer
 
-sensitive_post_parameters_m = method_decorator(
-    sensitive_post_parameters('password1', 'password2'),
-)
 
 
 #api 
