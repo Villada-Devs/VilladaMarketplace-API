@@ -1,24 +1,22 @@
 #allauth
-from multiprocessing import context
+from multiprocessing import Pool, context
 from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from requests import request
 from rest_framework import status, viewsets
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Event
+from .models import Event, Pool
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from dj_rest_auth.registration.serializers import (
     VerifyEmailSerializer, ResendEmailVerificationSerializer
 )
 from dj_rest_auth.views import LoginView
-from apiauth.serializers import EventsSerializer
-
-
-
+from apiauth.serializers import EventsSerializer, poolsSerializer
 #api 
 
 class EventsViewSet(viewsets.ViewSet):
@@ -35,7 +33,6 @@ class EventsViewSet(viewsets.ViewSet):
     """   
     def post(self, request):
         user_state = request.user.is_staff
-        user_id = request.user.id
         if user_state == True:
             serializer = EventsSerializer(data = request.data)
             if serializer.is_valid():
@@ -106,3 +103,28 @@ class ResendEmailVerificationView(CreateAPIView):
 
 
 
+class poolsDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = poolsSerializer
+    lookup_field =  "id"
+    
+    def get_queryset(self):
+        return Pool.objects.filter()
+    """
+    def destroy(self, request, *args, **kwargs):
+        user_state = request.user.is_staff
+        if user_state == True:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+
+    def update(self, request, *args, **kwargs):
+        user_state = request.user.is_staff
+        if user_state == True:
+            return super().update(request, *args, **kwargs)
+
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+    """

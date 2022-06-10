@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 from venv import create
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
@@ -24,7 +25,12 @@ class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id','author','title', 'body', 'created_date','image', 'event_date']
-        
+
+class poolsSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source="created_by.username", read_only=True)       
+    class Meta:
+        model = Pool
+        fields = ['id', 'author','locality']
 
 # AUTH API
 #register serializer override

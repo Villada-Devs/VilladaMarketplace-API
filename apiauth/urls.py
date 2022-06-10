@@ -11,7 +11,7 @@ from allauth.account.views import ConfirmEmailView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from .views import EventsDetailView, EventsViewSet, ResendEmailVerificationView
+from .views import EventsDetailView, EventsViewSet, ResendEmailVerificationView, poolsDetailView
 from apiauth import views
 from rest_framework import routers
 router = routers.SimpleRouter()
@@ -51,6 +51,10 @@ urlpatterns = [
      #jwt token (token and refresh)
      path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
      path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
+     #pool
+     path("pools/<int:id>/",poolsDetailView.as_view(), name='Pools_detail'),
+     
     
 ]
 
