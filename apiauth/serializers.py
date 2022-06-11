@@ -11,7 +11,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
 from rest_framework.generics import UpdateAPIView
 from django.contrib.auth.models import User
-from .models import Event
+from .models import Event, Pool
 from allauth.account import app_settings as allauth_settings
 from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
@@ -30,7 +30,7 @@ class poolsSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source="created_by.username", read_only=True)       
     class Meta:
         model = Pool
-        fields = ['id', 'author','locality']
+        exclude = ['created_by']
 
 # AUTH API
 #register serializer override

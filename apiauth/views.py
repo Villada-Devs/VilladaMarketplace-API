@@ -4,6 +4,7 @@ from allauth.account.views import ConfirmEmailView
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from pyparsing import empty
 from requests import request
 from rest_framework import status, viewsets
 from rest_framework.exceptions import MethodNotAllowed
@@ -102,29 +103,30 @@ class ResendEmailVerificationView(CreateAPIView):
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
 
 
+class poolsListView(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Pool.objects.all()
+        serializer = poolsSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-class poolsDetailView(RetrieveUpdateDestroyAPIView):
+    def post(self, request):
+        serializer = poolsSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save(created_by = self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class poolsDetailView(RetrieveAPIView):
     serializer_class = poolsSerializer
     lookup_field =  "id"
     
     def get_queryset(self):
         return Pool.objects.filter()
-    """
-    def destroy(self, request, *args, **kwargs):
-        user_state = request.user.is_staff
-        if user_state == True:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class poolsFromUser(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Pool.objects.filter(created_by = request.user)
+        serializer = poolsSerializer(queryset, many = True)
+        return Response(serializer.data)
     
-
-    def update(self, request, *args, **kwargs):
-        user_state = request.user.is_staff
-        if user_state == True:
-            return super().update(request, *args, **kwargs)
-
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
-    """
+    

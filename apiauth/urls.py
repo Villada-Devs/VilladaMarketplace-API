@@ -11,7 +11,7 @@ from allauth.account.views import ConfirmEmailView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from .views import EventsDetailView, EventsViewSet, ResendEmailVerificationView, poolsDetailView
+from .views import EventsDetailView, EventsViewSet, ResendEmailVerificationView, poolsDetailView, poolsListView, poolsFromUser
 from apiauth import views
 from rest_framework import routers
 router = routers.SimpleRouter()
@@ -54,13 +54,14 @@ urlpatterns = [
 
      #pool
      path("pools/<int:id>/",poolsDetailView.as_view(), name='Pools_detail'),
-     
+    
     
 ]
 
 
 
 #api urls with router
-
+router.register('mypools', poolsFromUser, basename='PoolsFromEachUser')
+router.register('pools', poolsListView, basename='PoolsModelGetALL')
 router.register('events', EventsViewSet, basename='EventsModelGetALL')
 urlpatterns += router.urls
