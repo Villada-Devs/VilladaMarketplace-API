@@ -122,5 +122,10 @@ class poolsFromUser(viewsets.ViewSet):
         queryset = Pool.objects.filter(created_by = request.user)
         serializer = poolsSerializer(queryset, many = True)
         return Response(serializer.data)
-    
+
+    #destroy
+
+
+    #update
+
     
