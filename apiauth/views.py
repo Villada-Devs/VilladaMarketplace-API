@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Event, Pool
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.viewsets import GenericViewSet
 from dj_rest_auth.registration.serializers import (
     VerifyEmailSerializer, ResendEmailVerificationSerializer
 )
@@ -104,7 +105,7 @@ class ResendEmailVerificationView(CreateAPIView):
 
 
 
-class poolsListView(viewsets.ViewSet):
+class poolsListView(GenericViewSet):
     def list(self, request):
         queryset = Pool.objects.all()
         serializer = poolsSerializer(queryset, many=True)
@@ -116,6 +117,7 @@ class poolsListView(viewsets.ViewSet):
             serializer.save(created_by = self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class poolsFromUser(viewsets.ViewSet):
     def list(self, request):
@@ -124,8 +126,5 @@ class poolsFromUser(viewsets.ViewSet):
         return Response(serializer.data)
 
     #destroy
-
-
-    #update
-
     
+
