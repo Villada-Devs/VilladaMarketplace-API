@@ -44,7 +44,6 @@ class EventsViewSet(viewsets.ViewSet):
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
     
-
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
     lookup_field =  "id"
@@ -103,9 +102,7 @@ class ResendEmailVerificationView(CreateAPIView):
 
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
 
-
-
-class poolsListView(GenericViewSet):
+class poolsListView(viewsets.ViewSet):
     def list(self, request):
         queryset = Pool.objects.all()
         serializer = poolsSerializer(queryset, many=True)
@@ -118,13 +115,14 @@ class poolsListView(GenericViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
-class poolsFromUser(viewsets.ViewSet):
+class myPoolsView(viewsets.ViewSet):
     def list(self, request):
         queryset = Pool.objects.filter(created_by = request.user)
         serializer = poolsSerializer(queryset, many = True)
         return Response(serializer.data)
 
     #destroy
-    
-
+    def destroy(self, request):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
