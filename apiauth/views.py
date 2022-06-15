@@ -120,9 +120,4 @@ class myPoolsView(viewsets.ViewSet):
         queryset = Pool.objects.filter(created_by = request.user)
         serializer = poolsSerializer(queryset, many = True)
         return Response(serializer.data)
-
-    #destroy
-    def destroy(self, request):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
+        
