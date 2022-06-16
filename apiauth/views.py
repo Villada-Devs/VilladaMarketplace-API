@@ -57,7 +57,7 @@ class EventsDetailView(RetrieveUpdateDestroyAPIView):
         if user_state == True:
             instance = self.get_object()
             self.perform_destroy(instance)
-            return Response({'detail' : 'Event deleted succesfully'},status=status.HTTP_204_NO_CONTENT)
+            return Response({'ok' : 'Event deleted succesfully'},status=status.HTTP_200_OK)
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -118,8 +118,23 @@ class poolsListView(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy():
-        pass
 
+    def delete(self, request, *args, **kwargs): 
+        pool_id= request.query_params.get('')
+        if not pool_id:
+            return Response({'error' : 'You need to send pool id in the url'}, status=status.HTTP_403_FORBIDDEN)
+        
+        if not Pool.objects.filter(id=pool_id).exists():
+            return Response({'error' : 'There is not a pool with this id'}, status=status.HTTP_403_FORBIDDEN)
+        
+        instance = Pool.objects.filter(id=pool_id).last()
+
+        if instance.created_by != self.request.user:
+            return Response({'error' : 'You are not the owner of this pool'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        instance.delete()
+        return Response({'ok' : 'Pool deleted succesfully'}, status=status.HTTP_200_OK)
+
+        
     def update():
         pass
