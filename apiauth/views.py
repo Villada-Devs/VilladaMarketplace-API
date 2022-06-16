@@ -104,7 +104,10 @@ class ResendEmailVerificationView(CreateAPIView):
 
 class poolsListView(viewsets.ViewSet):
     def list(self, request):
+        user = request.GET.get('created_by')
         queryset = Pool.objects.all()
+        if user:
+            queryset = queryset.filter(created_by=user)  
         serializer = poolsSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -114,10 +117,9 @@ class poolsListView(viewsets.ViewSet):
             serializer.save(created_by = self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-class myPoolsView(viewsets.ViewSet):
-    def list(self, request):
-        queryset = Pool.objects.filter(created_by = request.user)
-        serializer = poolsSerializer(queryset, many = True)
-        return Response(serializer.data)
-        
+
+    def destroy():
+        pass
+
+    def update():
+        pass
