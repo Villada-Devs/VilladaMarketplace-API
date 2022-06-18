@@ -120,7 +120,7 @@ class poolsListView(viewsets.ViewSet):
 
 
     def delete(self, request, *args, **kwargs): 
-        pool_id= request.query_params.get('')
+        pool_id= request.query_params.get('id')
         if not pool_id:
             return Response({'error' : 'You need to send pool id in the url'}, status=status.HTTP_403_FORBIDDEN)
         
@@ -134,7 +134,11 @@ class poolsListView(viewsets.ViewSet):
         
         instance.delete()
         return Response({'ok' : 'Pool deleted succesfully'}, status=status.HTTP_200_OK)
-
+    
+    #poner junto con el delete
+    def update(self, request, *args, **kwargs):
+        pool_id= request.query_params.get('id')
+        instance = self.get_object()
+        print(instance)
         
-    def update():
-        pass
+        
