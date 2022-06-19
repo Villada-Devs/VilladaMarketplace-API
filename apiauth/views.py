@@ -107,7 +107,11 @@ class poolsListView(viewsets.ViewSet):
         user = request.GET.get('created_by')
         queryset = Pool.objects.all()
         if user:
-            queryset = queryset.filter(created_by=user)  
+            if str(request.user.id) != user:
+                print(request.user.id, user)
+                return Response({'error' : 'You can not see the pool list from other user'}, status=status.HTTP_401_UNAUTHORIZED)
+            queryset = queryset.filter(created_by=user)
+        
         serializer = poolsSerializer(queryset, many=True)
         return Response(serializer.data)
 
