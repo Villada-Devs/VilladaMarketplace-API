@@ -19,6 +19,7 @@ from dj_rest_auth.registration.serializers import (
 )
 from dj_rest_auth.views import LoginView
 from apiauth.serializers import EventsSerializer, poolsSerializer
+
 #api 
 
 class EventsViewSet(viewsets.ViewSet):
@@ -144,5 +145,5 @@ class poolsListView(viewsets.ViewSet):
         pool_id= request.query_params.get('id')
         instance = self.get_object()
         print(instance)
-        
+
         
