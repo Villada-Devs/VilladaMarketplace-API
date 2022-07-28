@@ -1,5 +1,4 @@
 from multiprocessing import Pool
-from venv import create
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.urls import exceptions as url_exceptions
@@ -16,7 +15,6 @@ from allauth.account import app_settings as allauth_settings
 from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
-import re
 
 #UPF API
 

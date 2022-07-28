@@ -20,55 +20,12 @@ from dj_rest_auth.registration.serializers import (
 from dj_rest_auth.views import LoginView
 from apiauth.serializers import EventsSerializer, poolsSerializer
 
-#api 
+#google login test
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
 
-class EventsViewSet(viewsets.ViewSet):
-    """
-    GET ver todos los eventos existentes
-    """
-    def list(self, request):
-        queryset = Event.objects.all()
-        EventSerializer = EventsSerializer(queryset, many=True)
-        return Response(EventSerializer.data)
-
-    """
-    Create view solo pueden hacer POST los admins
-    """   
-    def post(self, request):
-        user_state = request.user.is_staff
-        if user_state == True:
-            serializer = EventsSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save(created_by = self.request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
-    
-class EventsDetailView(RetrieveUpdateDestroyAPIView):
-    serializer_class = EventsSerializer
-    lookup_field =  "id"
-    
-    def get_queryset(self):
-        return Event.objects.filter()
-
-
-    def destroy(self, request, *args, **kwargs):
-        user_state = request.user.is_staff
-        if user_state == True:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response({'ok' : 'Event deleted succesfully'},status=status.HTTP_200_OK)
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
-
-    def update(self, request, *args, **kwargs):
-        user_state = request.user.is_staff
-        if user_state == True:
-            return super().update(request, *args, **kwargs)
-
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+#auth override functions
 
 class VerifyEmailView(APIView, ConfirmEmailView):
     permission_classes = (AllowAny,)
@@ -103,7 +60,67 @@ class ResendEmailVerificationView(CreateAPIView):
 
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
 
+# API (EVENTS, POOLS)
+
+class EventsViewSet(viewsets.ViewSet):
+    """
+    GET (List all events, all users can list)
+    """
+    def list(self, request):
+        queryset = Event.objects.all()
+        EventSerializer = EventsSerializer(queryset, many=True)
+        return Response(EventSerializer.data)
+
+    """
+    POST (Create event only admin can post)
+    """   
+    def post(self, request):
+        user_state = request.user.is_staff
+        if user_state == True:
+            serializer = EventsSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save(created_by = self.request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+class EventsDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = EventsSerializer
+    lookup_field =  "id"
+    
+    def get_queryset(self):
+        return Event.objects.filter()
+
+    """
+    DELETE (delete an event passing ID, only admin can delete)
+    """
+    def destroy(self, request, *args, **kwargs):
+        user_state = request.user.is_staff
+        if user_state == True:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response({'ok' : 'Event deleted succesfully'},status=status.HTTP_200_OK)
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    """
+    PATCH (update an event passing ID, only admin can delete)
+    """
+    def update(self, request, *args, **kwargs):
+        user_state = request.user.is_staff
+        if user_state == True:
+            return super().update(request, *args, **kwargs)
+
+        else:
+            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
 class poolsListView(viewsets.ViewSet):
+
+    """
+    LIST (retrieve a list of all pools, if a user id is sent in the url retrieve user pools list)
+    """
     def list(self, request):
         user = request.GET.get('created_by')
         queryset = Pool.objects.all()
@@ -116,6 +133,10 @@ class poolsListView(viewsets.ViewSet):
         serializer = poolsSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    """
+    POST (create a carpool entry)
+    """
+
     def post(self, request):
         serializer = poolsSerializer(data = request.data)
         if serializer.is_valid():
@@ -123,9 +144,11 @@ class poolsListView(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    """
+    DELETE (delete a pool sending the id in the url, the user only can delete her own pools)
+    """
     def delete(self, request, *args, **kwargs): 
-        pool_id= request.query_params.get('id')
+        pool_id = request.query_params.get('id')
         if not pool_id:
             return Response({'error' : 'You need to send pool id in the url'}, status=status.HTTP_403_FORBIDDEN)
         
@@ -140,10 +163,14 @@ class poolsListView(viewsets.ViewSet):
         instance.delete()
         return Response({'ok' : 'Pool deleted succesfully'}, status=status.HTTP_200_OK)
     
-    #poner junto con el delete
+
+    #CODING (METODO PATCH PONER JUNTO CON EL DELETE PARA APROVECHAR, REVISAR QUE REQUEST SE RECIVE)
     def update(self, request, *args, **kwargs):
         pool_id= request.query_params.get('id')
         instance = self.get_object()
         print(instance)
 
-        
+
+## prueba google
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
