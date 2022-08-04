@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import socket
+SECRET_KEY = 'django-insecure-l_69n67cy#h33rd&lm8b@ir$qj*-n8d*gobkh6dvkf$mds&(ht'
+EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
+EMAIL_HOST_PASSWORD = 'cjjwabmswfshlzdk'
 
 
 
@@ -52,7 +55,10 @@ INSTALLED_APPS = [
     'drf_yasg',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
+    'events',
+    'marketplace',
+    'carpool',
+    'drf_multiple_model',
 
 ]
 REST_SESSION_LOGIN = False 
@@ -97,7 +103,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'api.urls'
+ROOT_URLCONF = 'config.urls'
 
 
 TEMPLATES = [
@@ -116,7 +122,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'api.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 REST_AUTH_REGISTER_SERIALIZERS = { 
     'REGISTER_SERIALIZER': 'apiauth.serializers.RegisterSerializer', 

@@ -1,36 +1,13 @@
-from multiprocessing import Pool
-from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
 from django.urls import exceptions as url_exceptions
 from django.utils.translation import gettext_lazy as _
-from rest_framework import exceptions, serializers
-from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView
-from rest_framework.generics import CreateAPIView
-from rest_framework.generics import DestroyAPIView
-from rest_framework.generics import UpdateAPIView
+from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Event, Pool
 from allauth.account import app_settings as allauth_settings
 from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
-#UPF API
 
-class EventsSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source="created_by.username", read_only=True)
-    class Meta:
-        model = Event
-        fields = ['id','author','title', 'body', 'created_date','image', 'event_date']
-
-class poolsSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(source="created_by.username", read_only=True)       
-    class Meta:
-        model = Pool
-        exclude = ['created_by']
-
-# AUTH API
 #register serializer override
 class RegisterSerializer(serializers.Serializer):
     """
