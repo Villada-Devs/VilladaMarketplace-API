@@ -13,11 +13,12 @@ class ImagesBookSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     #imagesbook = serializers.StringRelatedField(many=True)
-    imagesbook = ImagesBookSerializer(many=True)
+    #imagesbook = ImagesBookSerializer(many=True)
 
     class Meta:
         model = Book
-        fields = ['id','title', 'author', 'imagesbook','matter', 'age', 'editorial', 'status', 'price', 'tel', 'created_by', 'creation_date']
+    
+        fields = ['id','title','imagesbook','author','matter', 'age', 'editorial', 'status', 'price', 'tel', 'creation_date']
 
   
     def to_representation(self, instance):

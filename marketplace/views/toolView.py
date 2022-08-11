@@ -21,17 +21,48 @@ class ToolViewSet(viewsets.ModelViewSet):
         else:
             return self.get_serializer().Meta.model.objects.filter(id = pk, on_circulation = True).first() 
 
- 
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by = self.request.user) 
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)    
+
+
+
+    def update(self, request, *args, **kwargs):
+
+        partial = kwargs.pop('partial', False)
+        if request.user == self.get_object().created_by:
+
+            instance = self.get_object()    
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            if getattr(instance, '_prefetched_objects_cache', None):
+                instance._prefetched_objects_cache = {}
+
+            return Response(serializer.data)
+        else:
+            return Response({'Error':'You are not authorized to edit this product'}, status = status.HTTP_401_UNAUTHORIZED)
+
+
 
     def destroy(self, request, pk=None):
         tool = self.get_queryset().filter(id = pk).first()
 
         if tool != None:
-            tool.on_circulation = False
-            tool.save()
-            return Response({'message':'Herramienta eliminada correctamente'}, status = status.HTTP_200_OK)
+            if request.user ==self.get_object().created_by:
+
+                tool.on_circulation = False
+                tool.save()
+                return Response({'Message':'Tool deleted correctly'}, status = status.HTTP_200_OK)
+            else:
+                return Response({'Error':'You are not authorized to delete this product'}, status = status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error':'No existe ese producto'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({'Error':'No exists this product'}, status = status.HTTP_400_BAD_REQUEST)
 
 
 

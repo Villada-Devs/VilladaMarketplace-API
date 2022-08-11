@@ -5,7 +5,7 @@ from ..models import Tool
 class ToolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tool
-        exclude = ('on_circulation',)
+        exclude = ('on_circulation','created_by')
 
 
     def to_representation(self, instance):

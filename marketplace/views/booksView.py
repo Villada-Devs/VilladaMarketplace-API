@@ -29,6 +29,7 @@ class BookViewSet(viewsets.ModelViewSet):
 # https://www.cdrf.co/3.13/rest_framework.viewsets/ModelViewSet.html
 
     def list(self, request):
+        print(request.user)
 
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -42,16 +43,48 @@ class BookViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)  
 
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(created_by = self.request.user) #pone automaticamente cuando se crea el que creo el post y se exluye en el serializer el "created_by"
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)    
+
+
+
+    def update(self, request, *args, **kwargs):
+
+        partial = kwargs.pop('partial', False)
+        if request.user == self.get_object().created_by:
+
+            instance = self.get_object()    
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            if getattr(instance, '_prefetched_objects_cache', None):
+                instance._prefetched_objects_cache = {}
+
+            return Response(serializer.data)
+        else:
+            return Response({'Error':'You are not authorized to edit this product'}, status = status.HTTP_401_UNAUTHORIZED)
+
+
 
     def destroy(self, request, pk=None):
         libro = self.get_queryset().filter(id = pk).first()
 
         if libro != None:
-            libro.on_circulation = False
-            libro.save()
-            return Response({'message':'Libro eliminado correctamente'}, status = status.HTTP_200_OK)
+            if request.user ==self.get_object().created_by:
+
+                libro.on_circulation = False
+                libro.save()
+                return Response({'Message':'Book deleted correctly'}, status = status.HTTP_200_OK)
+            else:
+                return Response({'Error':'You are not authorized to delete this product'}, status = status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error':'No existe ese producto'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({"Error': 'This product don't exists"}, status = status.HTTP_400_BAD_REQUEST)
+
 
 
 

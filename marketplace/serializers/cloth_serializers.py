@@ -5,7 +5,7 @@ from ..models import Clothing
 class ClothSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clothing
-        exclude = ('on_circulation',)
+        exclude = ('on_circulation','created_by',)
 
     def to_representation(self, instance):
 
