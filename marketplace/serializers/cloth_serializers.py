@@ -3,6 +3,15 @@ from rest_framework import serializers
 from ..models import Clothing
 
 class ClothSerializer(serializers.ModelSerializer):
+
+    def validate_tel(self, data):
+        print(data)
+        if len(str(data)) == 10:
+            return data
+        else:
+            raise serializers.ValidationError({"Este numero de telefono no es valido": "This phone number don't exists"})
+        
+        
     class Meta:
         model = Clothing
         exclude = ('on_circulation','created_by',)
