@@ -5,7 +5,6 @@ from ..models import Tool
 class ToolSerializer(serializers.ModelSerializer):
 
     def validate_tel(self, data):
-        print(data)
         if len(str(data)) == 10:
             return data
         else:
