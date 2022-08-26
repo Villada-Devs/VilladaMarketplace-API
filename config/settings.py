@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import socket
+from datetime import timedelta
+
 SECRET_KEY = ''
 EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
 EMAIL_HOST_PASSWORD = ''
@@ -76,9 +78,17 @@ REST_FRAMEWORK = {
     ],
 }
 
+#jwt config
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'upf-authtoken'
 JWT_AUTH_REFRESH_COOKIE = 'upf-refresh-token'
+
+SIMPLE_JWT = {
+'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+'REFRESH_TOKEN_LIFETIME' : timedelta(days=2),
+
+}
+
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
