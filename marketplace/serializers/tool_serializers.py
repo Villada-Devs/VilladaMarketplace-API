@@ -3,6 +3,13 @@ from rest_framework import serializers
 from ..models import Tool
 
 class ToolSerializer(serializers.ModelSerializer):
+
+    def validate_tel(self, data):
+        if len(str(data)) == 10:
+            return data
+        else:
+            raise serializers.ValidationError({"Este numero de telefono no es valido": "This phone number don't exists"})
+
     class Meta:
         model = Tool
         exclude = ('on_circulation','created_by')

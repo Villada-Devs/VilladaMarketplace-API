@@ -74,7 +74,7 @@ class ImagesBook(models.Model):
 
 class Clothing(Creacion):
     type_of_garment = models.CharField(max_length=60)
-    size = models.CharField(max_length=10, choices=size_clothing)
+    size = models.CharField(max_length=10, choices=size_clothing, blank=True, null=True)
     description = models.TextField()
 
     def __str__(self):
