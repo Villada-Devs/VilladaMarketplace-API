@@ -9,3 +9,6 @@ class EventsSerializer(serializers.ModelSerializer):
         model = Event
         fields = ['id','author','title', 'body', 'created_date','image', 'event_date']
         
+
+
+
