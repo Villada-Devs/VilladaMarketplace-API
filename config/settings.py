@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import socket
-SECRET_KEY = 'django-insecure-l_69n67cy#h33rd&lm8b@ir$qj*-n8d*gobkh6dvkf$mds&(ht'
+SECRET_KEY = ''
 EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
-EMAIL_HOST_PASSWORD = 'cjjwabmswfshlzdk'
+EMAIL_HOST_PASSWORD = ''
 
 
 
