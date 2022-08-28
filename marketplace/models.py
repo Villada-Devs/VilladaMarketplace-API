@@ -112,6 +112,10 @@ class Clothing(Creacion):
 
     def __str__(self):
         return f"{self.type_of_cloth} - {self.size}"
+    
+    @property
+    def imagescloth(self):
+        return self.imagescloth_set.all()
 
 
 class ImagesClothing(models.Model):
@@ -131,6 +135,10 @@ class Tool(Creacion):
 
     def __str__(self):
         return f"{self.tool}"
+    
+    @property
+    def imagestool(self):
+        return self.imagestool_set.all()
 
 
 class ImagesTool(models.Model):
