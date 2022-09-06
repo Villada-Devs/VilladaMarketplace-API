@@ -1,8 +1,25 @@
 from rest_framework import serializers
 
-from ..models import Clothing
+from ..models import Clothing, ImagesClothing
+
+
+
+class ImagesClothSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ImagesClothing
+        fields = [
+            'image',
+             ]
+
+
+
+
 
 class ClothSerializer(serializers.ModelSerializer):
+
+    created_by_id = serializers.IntegerField(required=False)
+    published_date = serializers.DateField(required = False)
 
     def validate_tel(self, data):
         if len(str(data)) == 10:
@@ -10,21 +27,38 @@ class ClothSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError({"Este numero de telefono no es valido": "This phone number don't exists"})
         
-        
+
+
+
+    imagescloth = ImagesClothSerializer(many=True)
+
+    
+
     class Meta:
         model = Clothing
-        exclude = ('on_circulation','created_by',)
+        fields = [
+            'id',
+            'type_of_cloth',
+            'size',
+            'status',
+            'description',
+            'price',
+            'tel',
+            'created_by_id',
+            'creation_date',
+            'published_date',
+            'imagescloth',
+            ] 
 
-    def to_representation(self, instance):
 
-        return {
-            'id':instance.id,
-            'type_of_garment':instance.type_of_garment,
-            'size':instance.size,
-            'status':instance.status,
-            'description':instance.description,
-            'price':instance.price, 
-            'tel':instance.tel,
-            'created_by':instance.created_by.username,
-            'creation_date':instance.creation_date
-        }
+    def create(self, validated_data):
+
+        imagescloth_data = validated_data.pop('imagescloth')
+        cloth = Clothing.objects.create(**validated_data)
+
+        for imagecloth_data in imagescloth_data:
+            ImagesClothing.objects.create(cloth=cloth, **imagecloth_data)
+
+        return cloth 
+        
+    

@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework.response import Response
 
 from ..serializers.book_serializers import BookSerializer
@@ -11,26 +12,28 @@ from ..models import *
 
 class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'course', 'subject'] # filtros de busqueda, (.../?search=)
 
     def get_queryset(self, pk=None):
         
-        date = datetime.now() - timedelta(weeks=2)
+        date = datetime.now() - timedelta(weeks=3)
+        print(date)
         
-        # si tiene mas de dos semanas la publicacion se pone "on_circulation" = False
-        self.serializer_class().Meta.model.objects.filter(creation_date__lte =date).update(on_circulation = False)
-
+    
+        
         if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(on_circulation = True)
+            return self.get_serializer().Meta.model.objects.filter(checked = True, published_date__gte =date) # trae todos los books que esten 'checked' = True y los que tengan 'published_date' por arriba de la fecha (date)
         else:
-            return self.get_serializer().Meta.model.objects.filter(id = pk, on_circulation = True).first() 
+            return self.get_serializer().Meta.model.objects.filter(id = pk, checked = True, published_date__gte =date).first() 
 
  
+
+
 # estos metodos ya estan definidos en la clase ModelViewSet por lo unico que los redefinimos es por que vamos a hacer algo diferente como por ejemplo con destroy no queremos borrar la instancia solo queremos cambiar el "on_circulation" a False
 # https://www.cdrf.co/3.13/rest_framework.viewsets/ModelViewSet.html
 
     def list(self, request):
-        print(request.user)
-
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -55,6 +58,7 @@ class BookViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
 
         partial = kwargs.pop('partial', False)
+
         if request.user == self.get_object().created_by:
 
             instance = self.get_object()    
@@ -66,6 +70,7 @@ class BookViewSet(viewsets.ModelViewSet):
                 instance._prefetched_objects_cache = {}
 
             return Response(serializer.data)
+
         else:
             return Response({'Error':'You are not authorized to edit this product'}, status = status.HTTP_401_UNAUTHORIZED)
 
@@ -77,8 +82,7 @@ class BookViewSet(viewsets.ModelViewSet):
         if libro != None:
             if request.user ==self.get_object().created_by:
 
-                libro.on_circulation = False
-                libro.save()
+                libro.delete()
                 return Response({'Message':'Book deleted correctly'}, status = status.HTTP_200_OK)
             else:
                 return Response({'Error':'You are not authorized to delete this product'}, status = status.HTTP_401_UNAUTHORIZED)

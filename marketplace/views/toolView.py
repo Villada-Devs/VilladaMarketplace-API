@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework.response import Response
 
 from ..serializers.tool_serializers import ToolSerializer
@@ -9,19 +10,55 @@ from ..serializers.tool_serializers import ToolSerializer
 
 class ToolViewSet(viewsets.ModelViewSet):
     serializer_class = ToolSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['tool'] #filtro de busqueda
 
     def get_queryset(self, pk=None):
         
-        date = datetime.now() - timedelta(weeks=2)
+        date = datetime.now() - timedelta(weeks=3)
         
-        # si tiene mas de dos semanas la publicacion se pone "on_circulation" = False
-        self.serializer_class().Meta.model.objects.filter(creation_date__lte =date).update(on_circulation = False)
         if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(on_circulation = True)
+            return self.get_serializer().Meta.model.objects.filter(checked = True, published_date__gte =date)
         else:
-            return self.get_serializer().Meta.model.objects.filter(id = pk, on_circulation = True).first() 
+            return self.get_serializer().Meta.model.objects.filter(id = pk, checked = True, published_date__gte =date).first() 
 
+
+    def list(self, request):
+
+        queryset = self.filter_queryset(self.get_queryset())
     
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)   
+
+        """
+        tools = request.query_params.get('tool')
+
+        if tools[len(tools)-1] in ["s", "S"]:
+            tools = tools[0:len(tools)-1]
+        else:
+            pass
+
+        if tools == None:
+            queryset = self.filter_queryset(self.get_queryset())
+        else:
+            queryset = self.get_serializer().Meta.model.objects.filter(on_circulation = True, tool__contains = tools)
+        
+
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)  
+    """
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -56,8 +93,7 @@ class ToolViewSet(viewsets.ModelViewSet):
         if tool != None:
             if request.user ==self.get_object().created_by:
 
-                tool.on_circulation = False
-                tool.save()
+                tool.delete()
                 return Response({'Message':'Tool deleted correctly'}, status = status.HTTP_200_OK)
             else:
                 return Response({'Error':'You are not authorized to delete this product'}, status = status.HTTP_401_UNAUTHORIZED)

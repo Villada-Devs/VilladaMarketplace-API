@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework.response import Response
 
 from ..serializers.cloth_serializers import ClothSerializer
@@ -9,25 +10,28 @@ from ..serializers.cloth_serializers import ClothSerializer
 
 class ClothViewSet(viewsets.ModelViewSet):
     serializer_class = ClothSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['type_of_cloth'] #filtro de busqueda
+
 
     def get_queryset(self, pk=None):
         
-        date = datetime.now() - timedelta(weeks=2)
-        
-        # si tiene mas de dos semanas la publicacion se pone "on_circulation" = False
-        self.serializer_class().Meta.model.objects.filter(creation_date__lte =date).update(on_circulation = False)
+        date = datetime.now() - timedelta(weeks=3)
+
         if pk is None:
-            return self.get_serializer().Meta.model.objects.filter(on_circulation = True)
+            return self.get_serializer().Meta.model.objects.filter(checked = True, published_date__gte =date)
         else:
-            return self.get_serializer().Meta.model.objects.filter(id = pk, on_circulation = True).first() 
+            return self.get_serializer().Meta.model.objects.filter(id = pk, checked = True, published_date__gte =date).first() 
 
 
 
 
     def list(self, request, *args, **kwargs):
+        
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
+
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
@@ -36,12 +40,10 @@ class ClothViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)   
 
 
-
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(created_by = self.request.user) #pone automaticamente cuando se crea el que creo el post y se exluye en el serializer el "created_by"
+        serializer.save(created_by = self.request.user) #pone automaticamente el usuario que creo el objeto cuando se crea el post (se tiene que excluir en el serializer el "created_by")
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)    
 
@@ -70,8 +72,7 @@ class ClothViewSet(viewsets.ModelViewSet):
         if cloth != None:
             if request.user ==self.get_object().created_by:
 
-                cloth.on_circulation = False
-                cloth.save()
+                cloth.delete()
                 return Response({'Message':'The cloth was delete correctly'}, status = status.HTTP_200_OK)
             else:
                 return Response({'Error':'You are not authorized to delete this product'}, status = status.HTTP_401_UNAUTHORIZED)
