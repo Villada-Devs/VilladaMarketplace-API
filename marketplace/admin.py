@@ -15,7 +15,7 @@ class ImagesBookAdmin(admin.TabularInline):
 
 class BookAdmin(admin.ModelAdmin):
     inlines = [ImagesBookAdmin]
-    readonly_fields = ('title','id', 'course', 'author', 'subject', 'editorial','tel', 'created_by')
+    #readonly_fields = ('title','id', 'course', 'author', 'subject', 'editorial','tel', 'created_by')
     list_display = ['title','id', 'subject', 'course', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
     list_display_links = ['title']
@@ -39,11 +39,12 @@ class BookAdmin(admin.ModelAdmin):
     
     
 
-    fieldsets = (
+"""fieldsets = (
         (None,{
             'fields':('id','title', 'subject', 'course', 'author', 'editorial','tel','created_by',)
         }),
     )
+"""
 
 
     
@@ -54,7 +55,7 @@ class ImagesClothingAdmin(admin.TabularInline):
 
 class ClothingAdmin(admin.ModelAdmin):
     inlines = [ImagesClothingAdmin,]
-    readonly_fields = ('type_of_cloth','id', 'size', 'description', 'tel', 'created_by')
+    #readonly_fields = ('type_of_cloth','id', 'size', 'description', 'tel', 'created_by')
     list_display = ['type_of_cloth','id', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
     list_display_links = ['type_of_cloth']
@@ -82,11 +83,12 @@ class ClothingAdmin(admin.ModelAdmin):
     
     
 
-    fieldsets = (
+"""fieldsets = (
         (None,{
             'fields':('id','type_of_cloth', 'size', 'description','tel','created_by',)
         }),
-    )
+    )   
+"""
 
 
 #   IMAGENES DE HERRAMIENTAS
@@ -95,7 +97,7 @@ class ImagesToolAdmin(admin.TabularInline):
 
 class ToolAdmin(admin.ModelAdmin):
     inlines = [ImagesToolAdmin,]
-    readonly_fields = ('tool','id', 'description', 'tel', 'created_by')
+    #readonly_fields = ('tool','id', 'description', 'tel', 'created_by')
     list_display = ['tool','id', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
     list_display_links = ['tool']
@@ -123,11 +125,12 @@ class ToolAdmin(admin.ModelAdmin):
     
     
 
-    fieldsets = (
+""" fieldsets = (
         (None,{
             'fields':('id','tool', 'description','tel','created_by',)
         }),
     )
+    """
 
 
 
@@ -136,7 +139,7 @@ class ToolAdmin(admin.ModelAdmin):
 admin.site.register(Book, BookAdmin)
 admin.site.register(ImagesBook)
 
-admin.site.register(Clothing, ClothingAdmin)
+admin.site.register(Clothing, ClothingAdmin )
 admin.site.register(ImagesClothing)
 
 admin.site.register(Tool, ToolAdmin)
