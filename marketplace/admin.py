@@ -23,9 +23,6 @@ class BookAdmin(admin.ModelAdmin):
     actions = ['check_books',]
     
 
-
-
-
     def check_books(self, request, queryset):
         print(request)
         print(queryset)

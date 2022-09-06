@@ -12,10 +12,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv, find_dotenv
 import socket
 from datetime import timedelta
 
-SECRET_KEY = ''
+
+load_dotenv(find_dotenv())
+SECRET_KEY = os.environ['SECRET_KEY']
+
 EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
