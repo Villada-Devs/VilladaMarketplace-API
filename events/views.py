@@ -30,6 +30,7 @@ class EventsViewSet(viewsets.ViewSet):
         else:
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
     
+
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
     lookup_field =  "id"
@@ -50,7 +51,7 @@ class EventsDetailView(RetrieveUpdateDestroyAPIView):
             return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
 
     """
-    PATCH (update an event passing ID, only admin can delete)
+    put/patch (update an event passing ID, only admin can edit)
     """
     def update(self, request, *args, **kwargs):
         user_state = request.user.is_staff
