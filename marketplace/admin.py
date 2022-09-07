@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 from datetime import datetime, timedelta, date
 
-assasa
+
 
 admin.site.disable_action('delete_selected') #desactivamos accion del admin
 
