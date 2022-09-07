@@ -18,10 +18,10 @@ from datetime import timedelta
 
 
 load_dotenv(find_dotenv())
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = 'django-insecure-l_69n67cy#h33rd&lm8b@ir$qj*-n8d*gobkh6dvkf$mds&(ht' #os.environ['SECRET_KEY']
 
 EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_PASSWORD = 'cjjwabmswfshlzdk'  #os.environ['EMAIL_HOST_PASSWORD']
 
 
 
