@@ -50,7 +50,6 @@ class Creacion(models.Model):
     
 
 
-
     class Meta:
         abstract = True
 
