@@ -45,16 +45,17 @@ class poolsListView(viewsets.ViewSet):
         if not Pool.objects.filter(id=pool_id).exists():
             return Response({'error' : 'There is not a pool with this id'}, status=status.HTTP_403_FORBIDDEN)
         
-        instance = Pool.objects.filter(id=pool_id).last()
+        
 
         if instance.created_by != self.request.user:
             return Response({'error' : 'You are not the owner of this pool'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+            
+        instance = Pool.objects.filter(id=pool_id).last()
         instance.delete()
         return Response({'ok' : 'Pool deleted succesfully'}, status=status.HTTP_200_OK)
     
 
-    #CODING (METODO PATCH PONER JUNTO CON EL DELETE PARA APROVECHAR, REVISAR QUE REQUEST SE RECIVE)
+    #CODING (UPDATE )
     def update(self, request, *args, **kwargs):
         pool_id= request.query_params.get('id')
         instance = self.get_object()
