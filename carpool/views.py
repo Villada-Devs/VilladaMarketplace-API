@@ -2,6 +2,8 @@ from .serializers import poolsSerializer
 from .models import Pool
 from rest_framework.response import Response
 from rest_framework import status, viewsets
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
+
 # Create your views here.
 
 class poolsListView(viewsets.ViewSet):
@@ -57,3 +59,40 @@ class poolsListView(viewsets.ViewSet):
         pool_id= request.query_params.get('id')
         instance = self.get_object()
         print(instance)
+
+
+
+class PoolsDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = poolsSerializer
+    lookup_field =  "id"
+    
+    def get_queryset(self):
+        return Pool.objects.filter()
+
+    """
+    DELETE (delete an event passing ID, only admin can delete)
+    """
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print(instance.created_by)
+        print(self.request.user)
+        if self.request.user != instance.created_by:
+            self.perform_destroy(instance)
+            return Response({'error' : 'You are not the owner of this pool'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            self.perform_destroy(instance)
+            return Response({'ok' : 'Event deleted succesfully'},status=status.HTTP_200_OK)
+
+    """
+    PATCH (update an event passing ID, only admin can edit)
+    """
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if self.request.user == instance.created_by:
+            return super().update(request, *args, **kwargs)
+        else:
+            return Response({'error' : 'You are not the owner of this pool'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
