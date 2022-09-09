@@ -21,6 +21,8 @@ class ClothSerializer(serializers.ModelSerializer):
     created_by_id = serializers.IntegerField(required=False)
     published_date = serializers.DateField(required = False)
 
+
+
     def validate_tel(self, data):
         if len(str(data)) == 10:
             return data
@@ -30,8 +32,8 @@ class ClothSerializer(serializers.ModelSerializer):
 
 
 
-    imagescloth = ImagesClothSerializer(many=True)
-
+    imagescloth = ImagesClothSerializer(many=True, read_only =True)
+    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
 
     class Meta:
@@ -48,16 +50,17 @@ class ClothSerializer(serializers.ModelSerializer):
             'creation_date',
             'published_date',
             'imagescloth',
+            'uploaded_images',
             ] 
 
 
     def create(self, validated_data):
 
-        imagescloth_data = validated_data.pop('imagescloth')
+        uploaded_data = validated_data.pop('uploaded_images')
         cloth = Clothing.objects.create(**validated_data)
 
-        for imagecloth_data in imagescloth_data:
-            ImagesClothing.objects.create(cloth=cloth, **imagecloth_data)
+        for uploaded_item in uploaded_data:
+            ImagesClothing.objects.create(cloth=cloth, image= uploaded_item)
 
         return cloth 
         

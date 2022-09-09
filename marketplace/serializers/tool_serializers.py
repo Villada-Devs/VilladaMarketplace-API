@@ -29,7 +29,8 @@ class ToolSerializer(serializers.ModelSerializer):
 
 
 
-    imagestool = ImagesToolSerializer(many=True)
+    imagestool = ImagesToolSerializer(many=True, read_only =True)
+    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
 
     
 
@@ -46,16 +47,17 @@ class ToolSerializer(serializers.ModelSerializer):
             'creation_date',
             'published_date',
             'imagestool',
+            'uploaded_images',
             ] 
 
 
     def create(self, validated_data):
 
-        imagestool_data = validated_data.pop('imagestool')
+        uploaded_data = validated_data.pop('uploaded_images',)
         tool = Tool.objects.create(**validated_data)
 
-        for imagetool_data in imagestool_data:
-            ImagesTool.objects.create(tool=tool, **imagetool_data)
+        for uploaded_item in uploaded_data:
+            ImagesTool.objects.create(tool=tool, image= uploaded_item)
 
         return tool 
         
