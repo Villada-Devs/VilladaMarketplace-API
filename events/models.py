@@ -7,5 +7,18 @@ class Event(models.Model):
     title = models.CharField(max_length=30)
     body = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to="images")
     event_date = models.DateTimeField()
+
+    @property
+    def imagesevent(self):
+        return self.imagesbook_set.all()
+
+
+class ImagesEvent(models.Model):
+    image = models.ImageField(upload_to= "images")
+    event = models.ForeignKey('Event',related_name='imagesevent', on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return '%s: %s' % (self.image, self.event)
+
