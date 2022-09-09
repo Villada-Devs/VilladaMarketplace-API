@@ -21,20 +21,15 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate_username(self, username):
         if User.objects.filter(username = username).exists():
-            raise serializers.ValidationError("A user is already registered with this username")
+            raise serializers.ValidationError({"Error": "A user is already registered with Username."})
         return username
 
 
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
-        domain = email.split('@')[1]
-        if not domain == 'itsv.edu.ar':
-            raise serializers.ValidationError('The email must be from itsv.edu.ar domain')
-
         if allauth_settings.UNIQUE_EMAIL:
             if email and email_address_exists(email):
-                raise serializers.ValidationError(
-                    _("A user is already registered with this e-mail address."))
+                raise serializers.ValidationError({"Error": "A user is already registered with this e-mail address."})
         return email
     
     
@@ -47,7 +42,7 @@ class RegisterSerializer(serializers.Serializer):
             'email': self.validated_data.get('email', ''),
             'username': self.validated_data.get('username','')
         }
-
+        
     def save(self, request):
         adapter = get_adapter()
         user = adapter.new_user(request)

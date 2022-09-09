@@ -16,30 +16,17 @@ class ImagesBookSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-
-    created_by_id = serializers.IntegerField(required=False)
-    published_date = serializers.DateField(required = False)
-
-
     def validate_tel(self, data):
         if len(str(data)) == 10:
             return data
         else:
-            raise serializers.ValidationError({"Este numero de telefono no es valido": "This phone number don't exists"})
-
-
-    """def validate(self, data):
-        if len(str(data['tel'])) == 10:
-            return data                                 # esto hace lo mismo que el de arriba pero queria mostrar que despues del validate arriba si le pones el dato ya te lo trae solo a ese dato
-        else:
-            raise serializers.ValidationError({"tel": "This phone number don't exists"})
-"""
+            raise serializers.ValidationError({"Error": "This phone number is not valid, send 10 digits tel"})
             
-    
-    imagesbook = ImagesBookSerializer(many=True)
+    created_by_id = serializers.IntegerField(required=False)
+    published_date = serializers.DateField(required = False)
 
-    
-
+    imagesbook = ImagesBookSerializer(many=True, read_only =True)
+    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True)
     class Meta:
         model = Book
         fields = [
@@ -56,18 +43,18 @@ class BookSerializer(serializers.ModelSerializer):
             'creation_date',
             'published_date',
             'imagesbook',
+            'uploaded_images',
             ] 
 
+    
     def create(self, validated_data):
 
-        imagesbook_data = validated_data.pop('imagesbook')
+        uploaded_data = validated_data.pop('uploaded_images')
         book = Book.objects.create(**validated_data)
 
-        for imagebook_data in imagesbook_data:
-            ImagesBook.objects.create(book=book, **imagebook_data)
-
-        return book 
-        
+        for uploaded_item in uploaded_data:
+            ImagesBook.objects.create(book=book, image= uploaded_item)
+        return book
 
 """
 {
