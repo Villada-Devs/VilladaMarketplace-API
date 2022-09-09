@@ -1,3 +1,4 @@
+from tkinter import Image
 from wsgiref import validate
 from rest_framework import serializers
 from .models import Event, ImagesEvent
@@ -37,5 +38,18 @@ class EventsSerializer(serializers.ModelSerializer):
         for uploaded_item in uploaded_data:
             ImagesEvent.objects.create(event=event, image= uploaded_item)
         return event
-        
     
+    def clear_existing_images(self, instance):
+        for event_image in instance.imagesevent.all():
+            event_image.delete()
+
+
+    def update(self, instance, validated_data):
+        images = validated_data.pop('uploaded_images', None)
+        if images:
+            self.clear_existing_images(instance)
+            event_image_model_instance = [ImagesEvent(event=instance, image=image)for image in images]
+            ImagesEvent.objects.bulk_create(
+                event_image_model_instance
+            )
+        return super().update(instance, validated_data)
