@@ -16,17 +16,22 @@ class ImagesBookSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
+
     def validate_tel(self, data):
         if len(str(data)) == 10:
             return data
         else:
             raise serializers.ValidationError({"Error": "This phone number is not valid, send 10 digits tel"})
             
+
     created_by_id = serializers.IntegerField(required=False)
     published_date = serializers.DateField(required = False)
 
+
     imagesbook = ImagesBookSerializer(many=True, read_only =True)
-    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True)
+    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
+    
+    
     class Meta:
         model = Book
         fields = [
