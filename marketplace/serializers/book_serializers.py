@@ -34,12 +34,14 @@ class BookSerializer(serializers.ModelSerializer):
             
             
 
-    created_by_id = serializers.IntegerField(required=False)
+    created_by_user = serializers.CharField(source="created_by.username", read_only=True) # esto es para poder ver el nombre del usuario que lo creo y no el id y el read_only para que no nos lo pida en el serializer ya que se lo ponemos en el views
+
+    #created_by_id = serializers.IntegerField(required=False) # esto era para que no me lo pida obligatoriamente en el serializer al created_by ya que se pone solo en views
     published_date = serializers.DateField(required = False)
 
 
     imagesbook = ImagesBookSerializer(many=True, read_only =True)
-    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
+    uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
     
     class Meta:
@@ -54,7 +56,7 @@ class BookSerializer(serializers.ModelSerializer):
             'status',
             'price',
             'tel',
-            'created_by_id',
+            'created_by_user',
             'creation_date',
             'published_date',
             'imagesbook',
