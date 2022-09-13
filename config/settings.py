@@ -11,7 +11,7 @@ load_dotenv(find_dotenv())
 """
 Path and keys config
 """
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = 'django-insecure-l_69n67cy#h33rd&lm8b@ir$qj*-n8d*gobkh6dvkf$mds&(ht' #os.environ['SECRET_KEY']
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -71,6 +71,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2
 }
 
 
@@ -174,7 +177,7 @@ Email Configurations
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_PASSWORD = 'cjjwabmswfshlzdk' #os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
