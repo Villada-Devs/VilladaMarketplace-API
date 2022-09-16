@@ -13,8 +13,6 @@ class ImagesBookSerializer(serializers.ModelSerializer):
             'image'
              ]
 
-
-
 class BookSerializer(serializers.ModelSerializer):
     def validate_tel(self, data):
         if len(str(data)) == 10:
