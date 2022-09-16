@@ -37,7 +37,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_first_name(self, first_name):
         first_name.split()
         counter=0
-        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|}{~:]' 
+        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|.}{~:;^`]' 
         for i in range(len(first_name)):
             
             if first_name[i] in special_chars:
@@ -51,7 +51,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_last_name(self, last_name):
         last_name.split()
         counter=0
-        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|}{~:]' 
+        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|.}{~:;^`]' 
         for i in range(len(last_name)):
             
             if last_name[i] in special_chars:
