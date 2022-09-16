@@ -16,3 +16,4 @@ class Pool(models.Model):
     day_viernes = models.BooleanField(default=False)
     first_tel = models.PositiveIntegerField()
     alternative_tel = models.PositiveIntegerField()
+    
