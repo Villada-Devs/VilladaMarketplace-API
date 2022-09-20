@@ -22,7 +22,6 @@ socket.getaddrinfo('localhost', 8080)
 DEBUG = True
 ALLOWED_HOSTS = []
 
-
 # Application definition
 DEFAULT_APPS = [
     'django.contrib.admin',
