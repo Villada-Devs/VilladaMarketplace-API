@@ -6,8 +6,8 @@ from allauth.account import app_settings as allauth_settings
 from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
-
-
+from string import printable
+import re
 #register serializer override
 class RegisterSerializer(serializers.Serializer):
     """
@@ -22,6 +22,7 @@ class RegisterSerializer(serializers.Serializer):
     def validate_username(self, username):
         if User.objects.filter(username = username).exists():
             raise serializers.ValidationError({"Error": "A user is already registered with Username."})
+        
         return username
 
 
@@ -33,7 +34,33 @@ class RegisterSerializer(serializers.Serializer):
         return email
     
     
+    def validate_first_name(self, first_name):
+        first_name.split()
+        counter=0
+        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|.}{~:;^`]' 
+        for i in range(len(first_name)):
+            
+            if first_name[i] in special_chars:
+                counter+=1   
+          
+        if counter:
+            raise serializers.ValidationError({"Error": "First name contains special characters, please remove them"})
+        
+        return first_name
 
+    def validate_last_name(self, last_name):
+        last_name.split()
+        counter=0
+        special_chars='[@_123456"7890!#[]-$%^&*()<>?/\|.}{~:;^`]' 
+        for i in range(len(last_name)):
+            
+            if last_name[i] in special_chars:
+                counter+=1   
+          
+        if counter:
+            raise serializers.ValidationError({"Error": "Last name contains special characters, please remove them"})
+        
+        return last_name
     def get_cleaned_data(self):
         return {
             'first_name': self.validated_data.get('first_name', ''),
