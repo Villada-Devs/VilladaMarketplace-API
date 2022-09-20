@@ -65,5 +65,26 @@ class ClothSerializer(serializers.ModelSerializer):
             ImagesClothing.objects.create(cloth=cloth, image= uploaded_item)
 
         return cloth 
+
+
+
+
+    def update(self, instance, validated_data):
+        images = validated_data.pop('uploaded_images', None)
+
+        print("imagenes nuevas: ",images)
+        
+        if images:
+            #print(instance.id)
+            images_tool_old = ImagesClothing.objects.filter(tool_id = instance.id)
+            print("imagenes cloth que ya estaban: ", images_tool_old)
+            images_tool_old.delete()
+        
+
+            cloth_image_model_instance = [ImagesClothing(tool=instance, image=image)for image in images]
+            ImagesClothing.objects.bulk_create(cloth_image_model_instance)
+
+        return super().update(instance, validated_data)
+
         
     

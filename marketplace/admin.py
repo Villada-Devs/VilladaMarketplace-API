@@ -37,15 +37,6 @@ class BookAdmin(admin.ModelAdmin):
     
     
 
-"""fieldsets = (
-        (None,{
-            'fields':('id','title', 'subject', 'course', 'author', 'editorial','tel','created_by',)
-        }),
-    )
-"""
-
-
-    
 
 # IMAGENES DE ROPA
 class ImagesClothingAdmin(admin.TabularInline):
@@ -79,12 +70,6 @@ class ClothingAdmin(admin.ModelAdmin):
     
     
 
-"""fieldsets = (
-        (None,{
-            'fields':('id','type_of_cloth', 'size', 'description','tel','created_by',)
-        }),
-    )   
-"""
 
 
 #   IMAGENES DE HERRAMIENTAS
@@ -118,14 +103,6 @@ class ToolAdmin(admin.ModelAdmin):
 
     
     
-
-""" fieldsets = (
-        (None,{
-            'fields':('id','tool', 'description','tel','created_by',)
-        }),
-    )
-    """
-
 
 
 

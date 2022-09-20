@@ -25,12 +25,6 @@ class ToolSerializer(serializers.ModelSerializer):
     
     # VALIDACIONES
 
-    # def validate_tel(self, data):
-    #     if len(str(data)) == 10:
-    #         return data
-    #     else:
-    #         raise serializers.ValidationError({"Este numero de telefono no es valido": "This phone number don't exists"})
-
 
     def validate(self, data):
         #print(data)

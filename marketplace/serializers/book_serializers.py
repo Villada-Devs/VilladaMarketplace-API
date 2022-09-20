@@ -25,13 +25,15 @@ class BookSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"Error": "This phone number is not valid, send 10 digits tel"})
 
     
-    """ def validate(self, data):
-        if len(str(data['tel'])) == 10:
-            return data                                 # esto hace lo mismo que el de arriba pero queria mostrar que despues del validate arriba si le pones el dato ya te lo trae solo a ese dato
-        else:
-            raise serializers.ValidationError({"tel": "This phone number don't exists"})
-"""
+    # def validate(self, data):
+    #     if len(str(data['tel'])) == 10:
+    #         return data                                 # esto hace lo mismo que el de arriba pero queria mostrar que despues del validate arriba si le pones el dato ya te lo trae solo a ese dato
+    #     else:
+    #         raise serializers.ValidationError({"tel": "This phone number don't exists"})
+
             
+            
+
             
 
     created_by_user = serializers.CharField(source="created_by.username", read_only=True) # esto es para poder ver el nombre del usuario que lo creo y no el id y el read_only para que no nos lo pida en el serializer ya que se lo ponemos en el views
@@ -72,21 +74,23 @@ class BookSerializer(serializers.ModelSerializer):
         for uploaded_item in uploaded_data:
             ImagesBook.objects.create(book=book, image= uploaded_item)
         return book
+    
 
-"""
-{
-    "title": "TEST 1",
-    "author": "gaston",
-    "subject": "lengua",
-    "course": "6 Año",
-    "editorial": "",
-    "status": "Casi nuevo",
-    "price": 88888,
-    "tel": 3517059561,
-    "imagesbook": [
-        {
-            "image": "/home/gaston/Imágenes/test.png"
-        }
-    ]
-}
-"""
+
+
+    def update(self, instance, validated_data):
+        images = validated_data.pop('uploaded_images', None)
+
+        print("imagenes nuevas: ",images)
+        
+        if images:
+            #print(instance.id)
+            images_tool_old = ImagesBook.objects.filter(tool_id = instance.id)
+            print("imagenes book que ya estaban: ", images_tool_old)
+            images_tool_old.delete()
+        
+
+            book_image_model_instance = [ImagesBook(tool=instance, image=image)for image in images]
+            ImagesBook.objects.bulk_create(book_image_model_instance)
+
+        return super().update(instance, validated_data)
