@@ -52,6 +52,7 @@ class Creacion(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-published_date', '-creation_date']
 
 
 
@@ -70,19 +71,7 @@ class Book(Creacion):
     def __str__(self):
         return f"{self.title} - {self.course}"
 
-    # def titulo(self):
-
-    #     hoy = date.today()
-    #     limit_days = hoy - self.creation_date # nose por que en ves de poner hoy si pongo todo 'date.today()' no funciona asi que lo dejo asi
-    #     print(limit_days, timedelta(weeks=2))
-
-
-    #     if limit_days > timedelta(weeks=2):
-    #         return format_html('<span style="color: red;">{0}</span>'.format(self.title))
-    #     if self.checked == False:
-    #         return format_html('<span style="color: yellow;">{0}</span>'.format(self.title)) # esto hace que se ponga de un color o otro el 'title' si esta checkeado o no
-    #     else:
-    #         return format_html('<span style="color: green;">{0}</span>'.format(self.title))
+    
 
     @property
     def imagesbook(self):

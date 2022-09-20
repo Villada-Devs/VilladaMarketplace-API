@@ -9,3 +9,6 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="images")
     event_date = models.DateTimeField()
+
+    class Meta:
+        ordering = ['-created_date']

@@ -29,7 +29,7 @@ class ToolSerializer(serializers.ModelSerializer):
 
 
 
-    imagestool = ImagesToolSerializer(many=True)
+    #imagestool = ImagesToolSerializer(many=True)
 
     
 
@@ -45,19 +45,18 @@ class ToolSerializer(serializers.ModelSerializer):
             'created_by_id',
             'creation_date',
             'published_date',
-            'imagestool',
             ] 
 
 
-    def create(self, validated_data):
+    # def create(self, validated_data):
 
-        imagestool_data = validated_data.pop('imagestool')
-        tool = Tool.objects.create(**validated_data)
+    #     imagestool_data = validated_data.pop('imagestool')
+    #     tool = Tool.objects.create(**validated_data)
 
-        for imagetool_data in imagestool_data:
-            ImagesTool.objects.create(tool=tool, **imagetool_data)
+    #     for imagetool_data in imagestool_data:
+    #         ImagesTool.objects.create(tool=tool, **imagetool_data)
 
-        return tool 
+    #     return tool 
         
     
 
