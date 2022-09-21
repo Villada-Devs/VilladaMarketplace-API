@@ -60,7 +60,6 @@ class ToolSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-
         uploaded_data = validated_data.pop('uploaded_images',)
         tool = Tool.objects.create(**validated_data)
 
