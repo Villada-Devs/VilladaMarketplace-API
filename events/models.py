@@ -9,10 +9,12 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     event_date = models.DateTimeField()
 
+    class Meta:
+        ordering = ['-created_date']
+
     @property
     def imagesevent(self):
         return self.imagesbook_set.all()
-
 
 class ImagesEvent(models.Model):
     image = models.ImageField(upload_to= "images")
