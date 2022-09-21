@@ -17,5 +17,10 @@ class Pool(models.Model):
     first_tel = models.PositiveIntegerField()
     alternative_tel = models.PositiveIntegerField()
 
+
+    def __str__(self):
+        return "pool en " + self.locality
+
     class Meta:
         ordering = ['-id']
+
