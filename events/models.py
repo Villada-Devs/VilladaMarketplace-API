@@ -9,8 +9,12 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     event_date = models.DateTimeField()
 
+    def __str__(self):
+        return self.title 
     class Meta:
         ordering = ['-created_date']
+
+    
 
     @property
     def imagesevent(self):
@@ -19,6 +23,7 @@ class Event(models.Model):
 class ImagesEvent(models.Model):
     image = models.ImageField(upload_to= "images")
     event = models.ForeignKey('Event',related_name='imagesevent', on_delete=models.CASCADE)
+
 
 
     def __str__(self):
