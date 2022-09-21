@@ -7,11 +7,14 @@ from rest_framework.response import Response
 
 from ..serializers.cloth_serializers import ClothSerializer
 
+from ..pagination import CustomPageNumberPagination
 
 class ClothViewSet(viewsets.ModelViewSet):
     serializer_class = ClothSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['type_of_cloth'] #filtro de busqueda
+
+    pagination_class = CustomPageNumberPagination
 
 
     def get_queryset(self, pk=None):

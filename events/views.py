@@ -7,12 +7,27 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 # Create your views here.
 
+
 class EventsViewSet(viewsets.ViewSet):
     """
     GET (List all events, all users can list)
     """
+
     def list(self, request):
-        queryset = Event.objects.all()
+       # PAGINATION
+        page = request.query_params.get('page')
+        
+        if page == None:
+            queryset = Event.objects.all()[:10]
+            
+        else:
+            page = int(page)
+            page = page +1
+
+            max = page * 10
+            min = max -10
+            queryset = Event.objects.all()[min:max]
+
         EventSerializer = EventsSerializer(queryset, many=True)
         return Response(EventSerializer.data)
 

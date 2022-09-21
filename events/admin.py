@@ -1,4 +1,5 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from .models import Event, ImagesEvent
 # Register your models here.
 
@@ -13,3 +14,11 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event, EventAdmin)
+=======
+
+from .models import Event
+# Register your models here.
+
+
+admin.site.register(Event)
+>>>>>>> pagination-market
