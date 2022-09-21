@@ -18,8 +18,12 @@ class ImagesClothSerializer(serializers.ModelSerializer):
 
 class ClothSerializer(serializers.ModelSerializer):
 
-    created_by_id = serializers.IntegerField(required=False)
+    created_by_user = serializers.CharField(source="created_by.username", read_only=True)
+
+    #created_by_id = serializers.IntegerField(required=False)
     published_date = serializers.DateField(required = False)
+
+
 
     def validate_tel(self, data):
         if len(str(data)) == 10:
@@ -30,8 +34,8 @@ class ClothSerializer(serializers.ModelSerializer):
 
 
 
-    imagescloth = ImagesClothSerializer(many=True)
-
+    imagescloth = ImagesClothSerializer(many=True, read_only =True)
+    uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
 
     class Meta:
@@ -44,21 +48,43 @@ class ClothSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'tel',
-            'created_by_id',
+            'created_by_user',
             'creation_date',
             'published_date',
             'imagescloth',
+            'uploaded_images',
             ] 
 
 
     def create(self, validated_data):
 
-        imagescloth_data = validated_data.pop('imagescloth')
+        uploaded_data = validated_data.pop('uploaded_images')
         cloth = Clothing.objects.create(**validated_data)
 
-        for imagecloth_data in imagescloth_data:
-            ImagesClothing.objects.create(cloth=cloth, **imagecloth_data)
+        for uploaded_item in uploaded_data:
+            ImagesClothing.objects.create(cloth=cloth, image= uploaded_item)
 
         return cloth 
+
+
+
+
+    def update(self, instance, validated_data):
+        images = validated_data.pop('uploaded_images', None)
+
+        print("imagenes nuevas: ",images)
+        
+        if images:
+            #print(instance.id)
+            images_tool_old = ImagesClothing.objects.filter(tool_id = instance.id)
+            print("imagenes cloth que ya estaban: ", images_tool_old)
+            images_tool_old.delete()
+        
+
+            cloth_image_model_instance = [ImagesClothing(tool=instance, image=image)for image in images]
+            ImagesClothing.objects.bulk_create(cloth_image_model_instance)
+
+        return super().update(instance, validated_data)
+
         
     

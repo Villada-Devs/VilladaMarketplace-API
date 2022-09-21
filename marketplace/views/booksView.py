@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, date
+from marketplace.pagination import CustomPageNumberPagination
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
@@ -9,11 +10,14 @@ from ..serializers.book_serializers import BookSerializer
 
 from ..models import *
 
+from ..pagination import CustomPageNumberPagination
 
 class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'course', 'subject'] # filtros de busqueda, (.../?search=)
+
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self, pk=None):
         
@@ -36,6 +40,7 @@ class BookViewSet(viewsets.ModelViewSet):
     def list(self, request):
         queryset = self.filter_queryset(self.get_queryset())
 
+        
         page = self.paginate_queryset(queryset)
 
         if page is not None:

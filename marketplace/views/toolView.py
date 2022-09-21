@@ -8,10 +8,14 @@ from rest_framework.response import Response
 from ..serializers.tool_serializers import ToolSerializer
 
 
+from ..pagination import CustomPageNumberPagination
+
 class ToolViewSet(viewsets.ModelViewSet):
     serializer_class = ToolSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['tool'] #filtro de busqueda
+
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self, pk=None):
         
