@@ -1,5 +1,4 @@
-from tkinter import Image
-from wsgiref import validate
+
 from rest_framework import serializers
 from .models import Event, ImagesEvent
 
