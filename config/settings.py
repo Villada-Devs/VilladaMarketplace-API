@@ -104,7 +104,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
+LOGIN_URL = '/api/v1/login/'
 
 
 MIDDLEWARE = [
