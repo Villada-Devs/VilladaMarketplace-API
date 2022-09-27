@@ -6,6 +6,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(User, on_delete= models.CASCADE)
     title = models.CharField(max_length=30)
     body = models.TextField()
+    short_description = models.CharField(max_length=80)
     created_date = models.DateTimeField(auto_now_add=True)
     event_date = models.DateTimeField()
 
