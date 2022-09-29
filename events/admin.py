@@ -9,6 +9,7 @@ class ImagesBookAdmin(admin.TabularInline):
 
 class EventAdmin(admin.ModelAdmin):
     inlines = [ImagesBookAdmin]
+    readonly_fields = ('created_by',)
 
 
 
