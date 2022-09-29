@@ -1,4 +1,4 @@
-
+from rest_framework.response import Response
 from rest_framework import serializers
 from .models import Event, ImagesEvent
 
@@ -17,7 +17,7 @@ class EventsSerializer(serializers.ModelSerializer):
     #Campo para ver las imagenes que tiene el objeto(solo lectura)
     imagesevent = ImagesEventSerializer(many=True, read_only =True)
     #Campo para mandar imagenes al objeto(solo escritura)
-    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True)
+    uploaded_images = serializers.ListField(child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True, required=False)
     class Meta:
         model = Event
         fields = ['id',
@@ -32,12 +32,14 @@ class EventsSerializer(serializers.ModelSerializer):
         ]
     
     def create(self, validated_data):
-        uploaded_data = validated_data.pop('uploaded_images')
-        event = Event.objects.create(**validated_data)
+        if validated_data.get('uploaded_images'):
+            uploaded_data = validated_data.pop('uploaded_images')
+            event = Event.objects.create(**validated_data)
 
-        for uploaded_item in uploaded_data:
-            ImagesEvent.objects.create(event=event, image= uploaded_item)
-        return event
+            for uploaded_item in uploaded_data:
+                ImagesEvent.objects.create(event=event, image= uploaded_item)
+            return event
+        return validated_data
     
     def clear_existing_images(self, instance):
         for event_image in instance.imagesevent.all():
