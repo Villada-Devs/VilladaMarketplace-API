@@ -22,7 +22,8 @@ class EventsSerializer(serializers.ModelSerializer):
         model = Event
         fields = ['id',
         'author',
-        'title', 
+        'title',
+        'short_description',
         'body', 
         'created_date', 
         'event_date',
