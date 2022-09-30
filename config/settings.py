@@ -105,7 +105,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = '/api/v1/login/'
+LOGIN_URL = 'https://main.dtlgaufp375aa.amplifyapp.com/'
 
 
 MIDDLEWARE = [
