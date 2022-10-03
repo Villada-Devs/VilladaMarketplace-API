@@ -123,7 +123,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_HEADERS = [
+    "*",
+    "Bearer"
+]
+
+CORS_EXPOSE_HEADERS = [
+    "Bearer",
+    "*"
+]
 
 
 
