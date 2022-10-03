@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.html import format_html
 from datetime import datetime, timedelta, date
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 high_school_courses = (
@@ -44,7 +45,7 @@ class Creacion(models.Model):
     published_date = models.DateField(blank=True, null=True)
     checked = models.BooleanField(default=False)
     price = models.PositiveIntegerField()
-    tel = models.PositiveIntegerField()
+    tel = PhoneNumberField(blank = False)
     status = models.CharField(max_length=15, choices= product_status)
 
     
