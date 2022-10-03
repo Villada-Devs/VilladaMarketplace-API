@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 
 class Pool(models.Model):
@@ -12,8 +13,8 @@ class Pool(models.Model):
     day_miercoles = models.BooleanField(default=False)
     day_jueves = models.BooleanField(default=False)
     day_viernes = models.BooleanField(default=False)
-    first_tel = models.PositiveIntegerField()
-    alternative_tel = models.PositiveIntegerField()
+    first_tel = PhoneNumberField(blank=False)
+    alternative_tel = PhoneNumberField(blank=False)
 
 
     def __str__(self):
