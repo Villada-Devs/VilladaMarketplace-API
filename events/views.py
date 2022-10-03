@@ -12,7 +12,7 @@ class EventsViewSet(viewsets.ViewSet):
     """
     GET (List all events, all users can list)
     """
-
+    
     def list(self, request):
        # PAGINATION
         page = request.query_params.get('page')
