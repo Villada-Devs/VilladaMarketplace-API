@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.google',
     'drf_multiple_model',
     'corsheaders',
-
+    'phonenumber_field',
 ]
 
 LOCAL_APPS = [
@@ -55,6 +55,8 @@ LOCAL_APPS = [
     'carpool',
     
 ]
+
+PHONENUMBER_DEFAULT_REGION ='AR'
 
 # Application definition
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
