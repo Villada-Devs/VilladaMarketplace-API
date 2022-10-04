@@ -15,8 +15,9 @@ class Pool(models.Model):
     day_viernes = models.BooleanField(default=False)
     first_tel = PhoneNumberField(blank=False)
     alternative_tel = PhoneNumberField(blank=False)
-
-
+    lat = models.CharField(max_length=30)
+    lng = models.CharField(max_length=30)
+    
     def __str__(self):
         return "pool en " + self.locality
 
