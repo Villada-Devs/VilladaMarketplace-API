@@ -33,9 +33,9 @@ class EventsSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         try: 
+            
             uploaded_data = validated_data.pop('uploaded_images')
             event = Event.objects.create(**validated_data)
-
             for uploaded_item in uploaded_data:
                 ImagesEvent.objects.create(event=event, image= uploaded_item)
             
