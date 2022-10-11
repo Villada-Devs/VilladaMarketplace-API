@@ -17,6 +17,7 @@ class Pool(models.Model):
     alternative_tel = PhoneNumberField(blank=False)
     lat = models.CharField(max_length=30)
     lng = models.CharField(max_length=30)
+    creation_date = models.DateField()
     
     def __str__(self):
         return "pool en " + self.locality

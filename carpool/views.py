@@ -7,28 +7,12 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 # Create your views here.
 
 class poolsListView(viewsets.ViewSet):
-
     """
     LIST (retrieve a list of all pools, if a user id is sent in the url retrieve user pools list)
     """
-    def list(self, request):
-        # PAGINATION
-        page = request.query_params.get('page')
-        
-        if page == None:
-            queryset = Pool.objects.all()[:15]
-            
-        else:
-            page = int(page)
-            page = page +1
-
-            max = page * 15
-            min = max -15
-            queryset = Pool.objects.all()[min:max]
-
-
+    def list(self, request):    
+        queryset = Pool.objects.all()
         user = request.GET.get('created_by')
-        
         if user:
             if str(request.user.id) != user:
                 print(request.user.id, user)
