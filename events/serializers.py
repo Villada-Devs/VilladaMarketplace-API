@@ -40,10 +40,10 @@ class EventsSerializer(serializers.ModelSerializer):
                 ImagesEvent.objects.create(event=event, image= uploaded_item)
             
         except Exception as ex:
-            raise serializers.ValidationError({'error ' : 'no se puede crear un evento sin una imagen'})
+            raise serializers.ValidationError({'error ' : 'Image is needed to create an Event'})
         return event
         
-    #Este metodo se usa para borrar las imagenes 
+    #Este metodo se usa para borrar las imagenes
     def clear_existing_images(self, instance):
         for event_image in instance.imagesevent.all():
             event_image.delete()
