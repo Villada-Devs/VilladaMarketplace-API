@@ -78,6 +78,7 @@ class ToolSerializer(serializers.ModelSerializer):
 
     # la diferencia de este update con el de Events es que en Events agregan imagenes nuevas y en 
     # Marketplace se cambia las nuevas por las viejas
+    
     def update(self, instance, validated_data):
         images = validated_data.pop('uploaded_images', None)
 
