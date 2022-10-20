@@ -7,7 +7,7 @@ from dotenv import load_dotenv, find_dotenv
 import socket
 from datetime import timedelta
 load_dotenv(find_dotenv())
-
+import sys
 """
 Path and keys config
 """
@@ -175,12 +175,14 @@ DATABASES = {
         'PASSWORD': os.environ['DATABASE_PASSWORD'],  
         'HOST': os.environ['DATABASE_HOST'],  
         'PORT': '3306',
-        'OPTIONS': {  
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
-        }     
+        #'OPTIONS': {  
+        #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES"  
+        #} 
     }  
 }
 
+if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 
 """

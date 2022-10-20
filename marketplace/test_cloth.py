@@ -1,3 +1,4 @@
+"""
 import pytest
 from django.test import Client
 from rest_framework import status
@@ -83,3 +84,4 @@ def test_list_clothes():
     )
     assert cloth.type_of_cloth == 'bermuda'
 
+"""
