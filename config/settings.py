@@ -159,6 +159,10 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'apiauth.serializers.RegisterSerializer', 
     }
 
+REST_AUTH_SERIALIZERS = {
+    # Changed
+    'USER_DETAILS_SERIALIZER': 'apiauth.serializers.CustomUserDetailsSerializer',
+}
 """
 Database config
 """
