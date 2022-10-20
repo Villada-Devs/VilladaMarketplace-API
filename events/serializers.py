@@ -29,6 +29,7 @@ class EventsSerializer(serializers.ModelSerializer):
         'event_date',
         'imagesevent',
         'uploaded_images',
+        'event_type',
         ]
     
     def create(self, validated_data):
