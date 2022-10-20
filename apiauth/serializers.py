@@ -78,3 +78,11 @@ class RegisterSerializer(serializers.Serializer):
         setup_user_email(request, user, [])
         user.save()
         return user
+
+
+#este serializer cambia la info que se obtiene cuando se hace un get a /user o cuando devuelve el detail de un usuario en el login
+class CustomUserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('pk', 'first_name','last_name','username', 'email', 'is_staff')
+        read_only_fields = ('email', 'is_staff', 'pk')
