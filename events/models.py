@@ -5,17 +5,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 event_types = (
-    ('BIENVENIDA A FAMILIAS DE PRIMER AÑO' ,'BIENVENIDA A FAMILIAS DE PRIMER AÑO'),
-    ('TALLERES PEDAGÓGICOS' ,'TALLERES PEDAGÓGICOS'),
-    ('CONFERENCIAS' ,'CONFERENCIAS'),
-    ('RETIROS ESPIRITUALES' ,'RETIROS ESPIRITUALES'),
-    ('INTEGRACION DE LOS PADRES A LA LABOR EDUCATIVA' ,'INTEGRACION DE LOS PADRES A LA LABOR EDUCATIVA'),
-    ('LOCRO DEL EXALUMNO SALESIANO DEL VILLADA', 'LOCRO DEL EXALUMNO SALESIANO DEL VILLADA'),
-    ('UPF SOLIDARIA', 'UPF SOLIDARIA'),
-    ('DIA DEL EDUCADOR', 'DIA DEL EDUCADOR'),
-    ('BICICLETEADA SALESIANA', 'BICICLETEADA SALESIANA'),
-    ('ASADO DE FIN DE AÑO', 'ASADO DE FIN DE AÑO'),
-    ('VALLE DE LA INMACULADA', 'VALLE DE LA INMACULADA'),
+    ('BIENVENIDA A FAMILIAS DE PRIMER ' ,'Bienvenida a familias de primer año'),
+    ('TALLERES PEDAGÓGICOS' ,'Talleres pedagógicos'),
+    ('CONFERENCIAS' ,'Conferencias'),
+    ('RETIROS ESPIRITUALES' ,'Retiros espirituales'),
+    ('INTEGRACION DE LOS PADRES A LA LABOR EDUCATIVA' ,'Integración de los padres a la labor educativa'),
+    ('LOCRO DEL EXALUMNO SALESIANO DEL VILLADA', 'Locro del exalumno salesiano del villada'),
+    ('UPF SOLIDARIA', 'UPF solidaria'),
+    ('DIA DEL EDUCADOR', 'Dia del educador'),
+    ('BICICLETEADA SALESIANA', 'Bicicleteada salesiana'),
+    ('ASADO DE FIN DE AÑO', 'Asado de fin de año'),
+    ('VALLE DE LA INMACULADA', 'Valle de la inmaculada'),
 )
 class Event(models.Model):
     created_by = models.ForeignKey(User, on_delete= models.CASCADE)
