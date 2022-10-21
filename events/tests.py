@@ -1,5 +1,6 @@
 from apiauth.tests import *
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 # Create your tests here.
 class TestEvent(SetUpTest):
@@ -38,4 +39,20 @@ class TestEvent(SetUpTest):
 
 
     
-    
+    def test_event_post_by_admin(self):
+        self.events_url = 'http://localhost:8000/api/v1/events/'
+        User.objects.filter(email = 'dev@gmail.com').update(is_staff = True)
+        response = self.client.post(
+            self.events_url,
+            {
+                'title' : 'Titulo de ejemplo',
+                'body' : 'holamundo123',
+                'short_description' : 'descripcion corta',
+                'short_description' : 'descripcion corta',
+                'event_date' : '2022-10-20T15:11:31Z',
+                'event_type' : 'Bienvenida a familias de primer año',
+                'uploaded_images' : ''
+            },
+            format = 'json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg = response.data)

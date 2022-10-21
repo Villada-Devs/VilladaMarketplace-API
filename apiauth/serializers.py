@@ -8,6 +8,8 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from string import printable
 import re
+from django.contrib.auth.models import User
+
 #register serializer override
 class RegisterSerializer(serializers.Serializer):
     """
