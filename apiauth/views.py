@@ -55,3 +55,4 @@ class ResendEmailVerificationView(CreateAPIView):
             email.send_confirmation(request)
 
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
+
