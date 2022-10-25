@@ -1,3 +1,4 @@
+#import needed libs
 from http import client
 from django.test import TestCase
 from urllib import request
@@ -8,6 +9,8 @@ from allauth.account.admin import EmailAddress
 from allauth.account.signals import email_confirmed
 from rest_framework.test import APIClient
 
+#set up test is executed before any other test, it create an user, authenticate it and return a token.
+#with this token we can make all the others unitests
 class SetUpTest(APITestCase):
     def setUp(self):
         self.register_url = 'http://localhost:8000/api/v1/register/'
@@ -23,8 +26,9 @@ class SetUpTest(APITestCase):
             },
             format = 'json',
         )
-        
+        #verify the account
         EmailAddress.objects.filter(email = 'dev@gmail.com').update(verified = True)
+        #check that the register response is correct
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.data)
 
         self.client = APIClient()
@@ -38,10 +42,9 @@ class SetUpTest(APITestCase):
             },
             format = 'json',
         )
+        #check login response with user previously registered
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg = response.data)
         self.token = response.data['access_token']
         
-        
-
     def test_runner(self):
         print(self.token)
