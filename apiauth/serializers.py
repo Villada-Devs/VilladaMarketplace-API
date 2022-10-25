@@ -1,3 +1,5 @@
+#import al libs that are needed
+
 from django.urls import exceptions as url_exceptions
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -10,7 +12,7 @@ from string import printable
 import re
 from django.contrib.auth.models import User
 
-#register serializer override
+#register serializer override to customize the fields
 class RegisterSerializer(serializers.Serializer):
     """
     Serializer for user registration
@@ -21,13 +23,14 @@ class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(required=True, write_only=True)
     password1 = serializers.CharField(required=True, write_only=True)
 
+    #validate that the username chosen is unique
     def validate_username(self, username):
         if User.objects.filter(username = username).exists():
             raise serializers.ValidationError({"Error": "A user is already registered with Username."})
         
         return username
 
-
+    #validate unique email
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
         if allauth_settings.UNIQUE_EMAIL:
@@ -35,7 +38,7 @@ class RegisterSerializer(serializers.Serializer):
                 raise serializers.ValidationError({"Error": "A user is already registered with this e-mail address."})
         return email
     
-    
+    #validate that first name does not contain special characters
     def validate_first_name(self, first_name):
         first_name.split()
         counter=0
@@ -50,6 +53,7 @@ class RegisterSerializer(serializers.Serializer):
         
         return first_name
 
+    #validate that last name does not contain special characters
     def validate_last_name(self, last_name):
         last_name.split()
         counter=0
@@ -63,6 +67,8 @@ class RegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError({"Error": "Last name contains special characters, please remove them"})
         
         return last_name
+    
+    #this method get the data cleaned and validated from the serializer
     def get_cleaned_data(self):
         return {
             'first_name': self.validated_data.get('first_name', ''),
@@ -71,7 +77,8 @@ class RegisterSerializer(serializers.Serializer):
             'email': self.validated_data.get('email', ''),
             'username': self.validated_data.get('username','')
         }
-        
+    
+    #this method create a new uset with the cleaned data, after that configure an email in Email addres table 
     def save(self, request):
         adapter = get_adapter()
         user = adapter.new_user(request)
@@ -81,8 +88,9 @@ class RegisterSerializer(serializers.Serializer):
         user.save()
         return user
 
-
-#este serializer cambia la info que se obtiene cuando se hace un get a /user o cuando devuelve el detail de un usuario en el login
+# This serializer manage the user information detail, in this case we are overriding it to return custom fields
+#the library dj-rest-auth and allauth use this serializer inherited in many responses, for example in login response
+# when you get logged on you get the token and the data set in this serializer, also  in /user url
 class CustomUserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
