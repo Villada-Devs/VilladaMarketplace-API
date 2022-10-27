@@ -1,7 +1,12 @@
 #import al libs that are needed
 
+from cgi import print_form
+from email.mime import image
+import profile
+from xml.dom import ValidationErr
 from django.urls import exceptions as url_exceptions
 from django.utils.translation import gettext_lazy as _
+from requests import request
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from allauth.account import app_settings as allauth_settings
@@ -90,11 +95,23 @@ class RegisterSerializer(serializers.Serializer):
         Profile.objects.create(user=user)
         return user
 
+class ProfileSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Profile
+        fields = [
+            'image',
+        ]
+
 # This serializer manage the user information detail, in this case we are overriding it to return custom fields
 #the library dj-rest-auth and allauth use this serializer inherited in many responses, for example in login response
 # when you get logged on you get the token and the data set in this serializer, also  in /user url
+
 class CustomUserDetailsSerializer(serializers.ModelSerializer):
+    profile_image = ProfileSerializer(read_only = True)
     class Meta:
         model = User
-        fields = ('pk', 'first_name','last_name','username', 'email', 'is_staff')
-        read_only_fields = ('email', 'is_staff', 'pk')
+        fields = ('pk', 'first_name','last_name','username', 'email', 'is_staff', 'profile_image')
+        read_only_fields = ('pk','first_name', 'last_name', 'email', 'is_staff',)
+
+
