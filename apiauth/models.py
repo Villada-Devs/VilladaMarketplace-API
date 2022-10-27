@@ -4,7 +4,7 @@ from platformdirs import user_cache_dir
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete= models.CASCADE)
+    user = models.OneToOneField(User, on_delete= models.CASCADE, related_name = 'profile_image')
     image = models.ImageField(default="https://aaahockey.org/wp-content/uploads/2017/06/default-avatar.png")
     
     def __str__(self) -> str:

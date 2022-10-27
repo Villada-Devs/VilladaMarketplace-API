@@ -16,11 +16,6 @@ from dj_rest_auth.registration.serializers import (
 )
 from dj_rest_auth.views import LoginView
 
-#google login test
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
-
 #auth override functions
 
 class VerifyEmailView(APIView, ConfirmEmailView):
@@ -55,3 +50,7 @@ class ResendEmailVerificationView(CreateAPIView):
             email.send_confirmation(request)
 
         return Response({'detail': _('email sent')}, status=status.HTTP_200_OK)
+
+
+class ProfileView(RetrieveUpdateDestroyAPIView):
+    pass
