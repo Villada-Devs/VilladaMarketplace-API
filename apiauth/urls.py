@@ -12,7 +12,7 @@ from allauth.account.views import ConfirmEmailView
 from .views import ResendEmailVerificationView
 from apiauth import views
 from rest_framework import routers
-
+from .views import ProfileView
 router = routers.SimpleRouter()
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     path("resend-email-confirmation/", ResendEmailVerificationView.as_view(), name='Resend_verification_email'),
     path('jwt/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('jwt/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('profile/<int:id>', ProfileView.as_view())
 
 ]
 
