@@ -16,6 +16,8 @@ from dj_rest_auth.registration.serializers import (
 )
 from dj_rest_auth.views import LoginView
 
+from apiauth.serializers import ProfileSerializer
+from .models import Profile
 #auth override functions
 
 class VerifyEmailView(APIView, ConfirmEmailView):
@@ -53,4 +55,9 @@ class ResendEmailVerificationView(CreateAPIView):
 
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
-    pass
+    serializer_class = ProfileSerializer
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return Profile.objects.filter()
+

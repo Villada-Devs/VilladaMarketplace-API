@@ -1,9 +1,5 @@
 #import al libs that are needed
 
-from cgi import print_form
-from email.mime import image
-import profile
-from xml.dom import ValidationErr
 from django.urls import exceptions as url_exceptions
 from django.utils.translation import gettext_lazy as _
 from requests import request
@@ -18,6 +14,9 @@ import re
 from django.contrib.auth.models import User
 from .models import Profile
 
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+
 #register serializer override to customize the fields
 class RegisterSerializer(serializers.Serializer):
     """
@@ -27,7 +26,7 @@ class RegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=True, write_only=True)
     last_name = serializers.CharField(required=True, write_only=True)
     username = serializers.CharField(required=True, write_only=True)
-    password1 = serializers.CharField(required=True, write_only=True)
+    password1 = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
 
     #validate that the username chosen is unique
     def validate_username(self, username):
@@ -35,6 +34,10 @@ class RegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError({"Error": "A user is already registered with Username."})
         
         return username
+
+    def validate_password1(self, password1):
+        validate_password(password1, self.instance)
+        return password1
 
     #validate unique email
     def validate_email(self, email):
@@ -96,12 +99,13 @@ class RegisterSerializer(serializers.Serializer):
         return user
 
 class ProfileSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Profile
         fields = [
+            'pk',
             'image',
         ]
+    
 
 # This serializer manage the user information detail, in this case we are overriding it to return custom fields
 #the library dj-rest-auth and allauth use this serializer inherited in many responses, for example in login response
@@ -114,4 +118,4 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
         fields = ('pk', 'first_name','last_name','username', 'email', 'is_staff', 'profile_image')
         read_only_fields = ('pk','first_name', 'last_name', 'email', 'is_staff',)
 
-
+    
