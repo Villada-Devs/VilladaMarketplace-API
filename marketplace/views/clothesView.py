@@ -12,7 +12,7 @@ from ..pagination import CustomPageNumberPagination
 class ClothViewSet(viewsets.ModelViewSet):
     serializer_class = ClothSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['type_of_cloth'] #filtro de busqueda
+    search_fields = ['product_name'] #filtro de busqueda
 
     pagination_class = CustomPageNumberPagination
 

@@ -1,8 +1,13 @@
-from calendar import c
 from rest_framework import serializers
 
 from ..models import Book, ImagesBook
 
+
+class PropsNestedSerializer(serializers.Serializer):
+    author = serializers.CharField()
+    subject = serializers.CharField()
+    course = serializers.CharField()
+    editorial = serializers.CharField()
 
 
 class ImagesBookSerializer(serializers.ModelSerializer):
@@ -44,15 +49,15 @@ class BookSerializer(serializers.ModelSerializer):
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
     
+
+    props = PropsNestedSerializer(source='*')
+
     class Meta:
         model = Book
         fields = [
             'id',
             'title',
-            'author',
-            'subject',
-            'course',
-            'editorial',
+            'props',
             'status',
             'price',
             'tel',

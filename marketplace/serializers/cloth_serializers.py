@@ -3,6 +3,11 @@ from rest_framework import serializers
 from ..models import Clothing, ImagesClothing
 
 
+class PropsNestedSerializer(serializers.Serializer):
+    size = serializers.CharField()
+    description = serializers.CharField()
+    
+
 
 class ImagesClothSerializer(serializers.ModelSerializer):
 
@@ -11,8 +16,6 @@ class ImagesClothSerializer(serializers.ModelSerializer):
         fields = [
             'image',
              ]
-
-
 
 
 
@@ -38,14 +41,16 @@ class ClothSerializer(serializers.ModelSerializer):
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
 
+
+    props = PropsNestedSerializer(source='*')
+
     class Meta:
         model = Clothing
         fields = [
             'id',
             'type_of_cloth',
-            'size',
+            'props',
             'status',
-            'description',
             'price',
             'tel',
             'created_by_user',

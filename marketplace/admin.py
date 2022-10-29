@@ -1,4 +1,3 @@
-from atexit import register
 from django.contrib import admin
 from .models import *
 from datetime import datetime, timedelta, date
@@ -16,9 +15,9 @@ class ImagesBookAdmin(admin.TabularInline):
 class BookAdmin(admin.ModelAdmin):
     inlines = [ImagesBookAdmin]
     readonly_fields = ('checked', 'published_date',)
-    list_display = ['title','id', 'subject', 'course', 'checked','creation_date','published_date' ]
+    list_display = ['product_name','id', 'subject', 'course', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
-    list_display_links = ['title']
+    list_display_links = ['product_name']
     list_filter = ['checked',]
     actions = ['check_books',]
     
@@ -45,9 +44,9 @@ class ImagesClothingAdmin(admin.TabularInline):
 class ClothingAdmin(admin.ModelAdmin):
     inlines = [ImagesClothingAdmin,]
     readonly_fields = ('checked', 'published_date',)
-    list_display = ['type_of_cloth','id', 'checked','creation_date','published_date' ]
+    list_display = ['product_name','id', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
-    list_display_links = ['type_of_cloth']
+    list_display_links = ['product_name']
     list_filter = ['checked',]
     actions = ['check_cloths',]
     
@@ -79,9 +78,9 @@ class ImagesToolAdmin(admin.TabularInline):
 class ToolAdmin(admin.ModelAdmin):
     inlines = [ImagesToolAdmin,]
     readonly_fields = ('checked', 'published_date',)
-    list_display = ['tool','id', 'checked','creation_date','published_date' ]
+    list_display = ['product_name','id', 'checked','creation_date','published_date' ]
     ordering = ['checked','creation_date',] 
-    list_display_links = ['tool']
+    list_display_links = ['product_name']
     list_filter = ['checked',]
     actions = ['check_tools',]
     
@@ -115,4 +114,3 @@ admin.site.register(ImagesClothing)
 
 admin.site.register(Tool, ToolAdmin)
 admin.site.register(ImagesTool)
-

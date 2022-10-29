@@ -3,6 +3,11 @@ from rest_framework import serializers
 from ..models import ImagesTool, Tool
 
 
+
+class PropsNestedSerializer(serializers.Serializer):
+    description = serializers.CharField()
+
+
 class ImagesToolSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -10,9 +15,6 @@ class ImagesToolSerializer(serializers.ModelSerializer):
         fields = [
             'image',
              ]
-
-
-
 
 
 class ToolSerializer(serializers.ModelSerializer):
@@ -41,14 +43,15 @@ class ToolSerializer(serializers.ModelSerializer):
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # el listField() crea un array en donde se van a meter los objetos, en este caso las imagenes
 
     
+    props = PropsNestedSerializer(source='*')
 
     class Meta:
         model = Tool
         fields = [
             'id',
             'tool',
+            'props',
             'status',
-            'description',
             'price',
             'tel',
             'created_by_user',

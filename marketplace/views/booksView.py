@@ -15,7 +15,7 @@ from ..pagination import CustomPageNumberPagination
 class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'course', 'subject'] # filtros de busqueda, (.../?search=)
+    search_fields = ['product_name', 'course', 'subject'] # filtros de busqueda, (.../?search=)
 
     pagination_class = CustomPageNumberPagination
 

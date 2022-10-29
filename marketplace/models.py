@@ -40,6 +40,7 @@ size_clothing = (
 
 
 class Creacion(models.Model):
+    product_name = models.CharField(max_length=60)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     creation_date = models.DateField(auto_now_add=True)
     published_date = models.DateField(blank=True, null=True)
@@ -63,14 +64,13 @@ class Creacion(models.Model):
 # LIBROS
 
 class Book(Creacion):
-    title = models.CharField(max_length=60)
-    author = models.CharField(max_length=60, blank=True, null=True)
-    subject = models.CharField(max_length=60)
+    author = models.CharField(max_length=60, blank=True, null=True, default= '-')
+    subject = models.CharField(max_length=60, blank=True, null=True, default='-')
     course = models.CharField(max_length=15, choices= high_school_courses)
-    editorial = models.CharField(max_length=60, blank=True, null=True) 
+    editorial = models.CharField(max_length=60, blank=True, null=True, default= '-') 
 
-    def __str__(self):
-        return f"{self.title} - {self.course}"
+    def _str_(self):
+        return f"{self.product_name} - {self.course}"
 
     
 
@@ -85,7 +85,7 @@ class ImagesBook(models.Model):
     book = models.ForeignKey('Book',related_name='imagesbook', on_delete=models.CASCADE)
 
 
-    def __str__(self):
+    def _str_(self):
         return '%s: %s' % (self.image, self.book)
 
 
@@ -95,12 +95,11 @@ class ImagesBook(models.Model):
 # ROPA y UNIFORME
 
 class Clothing(Creacion):
-    type_of_cloth = models.CharField(max_length=60)
     size = models.CharField(max_length=10, choices=size_clothing, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default= '-')
 
-    def __str__(self):
-        return f"{self.type_of_cloth} - {self.size}"
+    def _str_(self):
+        return f"{self.product_name} - {self.size}"
     
     @property
     def imagescloth(self):
@@ -112,18 +111,17 @@ class ImagesClothing(models.Model):
     cloth = models.ForeignKey('Clothing',related_name='imagescloth', on_delete=models.CASCADE)
 
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.image} - {self.cloth}"
 
 
 # HERRAMIENTAS
 
 class Tool(Creacion):
-    tool = models.CharField(max_length=60)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default= '-')
 
-    def __str__(self):
-        return f"{self.tool}"
+    def _str_(self):
+        return f"{self.product_name}"
     
     @property
     def imagestool(self):
@@ -135,5 +133,5 @@ class ImagesTool(models.Model):
     tool = models.ForeignKey('Tool',related_name='imagestool', on_delete=models.CASCADE)
 
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.image} - {self.tool}"
