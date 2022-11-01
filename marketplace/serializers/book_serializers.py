@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from ..models import Book, ImagesBook
+from ..models import Book, ImagesBook, high_school_courses
 
 
 class PropsNestedSerializer(serializers.Serializer):
     author = serializers.CharField(required = False, allow_blank= True)
     subject = serializers.CharField(required = False, allow_blank= True)
-    course = serializers.CharField()
+    course = serializers.ChoiceField(high_school_courses)
     editorial = serializers.CharField(required = False, allow_blank= True)
 
     

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from ..models import Clothing, ImagesClothing
+from ..models import Clothing, ImagesClothing, size_clothing
 
 
 class PropsNestedSerializer(serializers.Serializer):
-    size = serializers.CharField()
+    size = serializers.ChoiceField(size_clothing)
     description = serializers.CharField(required = False, allow_blank= True)
     
 
