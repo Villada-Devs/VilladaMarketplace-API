@@ -48,7 +48,7 @@ class ClothSerializer(serializers.ModelSerializer):
         model = Clothing
         fields = [
             'id',
-            'type_of_cloth',
+            'product_name',
             'props',
             'status',
             'price',

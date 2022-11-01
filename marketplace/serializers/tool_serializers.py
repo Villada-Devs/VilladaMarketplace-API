@@ -49,7 +49,7 @@ class ToolSerializer(serializers.ModelSerializer):
         model = Tool
         fields = [
             'id',
-            'tool',
+            'product_name',
             'props',
             'status',
             'price',

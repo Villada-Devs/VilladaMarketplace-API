@@ -8,7 +8,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 high_school_courses = (
-    ('---', '---'),
     ('1 Año', '1 Año'),
     ('2 Año', '2 Año'),
     ('3 Año', '3 Año'),
@@ -19,14 +18,12 @@ high_school_courses = (
 )
 
 product_status = (
-    ('---', '---'),
     ('Usado', 'Usado'),
     ('Casi nuevo', 'Casi nuevo'),
     ('Excelente', 'Excelente')
 )
 
 size_clothing = (
-    ('---', '---'),
     ('XXS', 'XXS'),
     ('XS', 'XS'),
     ('S', 'S'),
