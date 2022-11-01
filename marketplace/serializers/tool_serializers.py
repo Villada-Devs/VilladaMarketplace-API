@@ -5,7 +5,7 @@ from ..models import ImagesTool, Tool
 
 
 class PropsNestedSerializer(serializers.Serializer):
-    description = serializers.CharField()
+    description = serializers.CharField(required = False, allow_blank= True)
 
 
 class ImagesToolSerializer(serializers.ModelSerializer):

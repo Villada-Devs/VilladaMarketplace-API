@@ -5,7 +5,7 @@ from ..models import Clothing, ImagesClothing
 
 class PropsNestedSerializer(serializers.Serializer):
     size = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(required = False, allow_blank= True)
     
 
 

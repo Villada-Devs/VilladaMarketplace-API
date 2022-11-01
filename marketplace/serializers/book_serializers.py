@@ -4,10 +4,12 @@ from ..models import Book, ImagesBook
 
 
 class PropsNestedSerializer(serializers.Serializer):
-    author = serializers.CharField()
-    subject = serializers.CharField()
+    author = serializers.CharField(required = False, allow_blank= True)
+    subject = serializers.CharField(required = False, allow_blank= True)
     course = serializers.CharField()
-    editorial = serializers.CharField()
+    editorial = serializers.CharField(required = False, allow_blank= True)
+
+    
 
 
 class ImagesBookSerializer(serializers.ModelSerializer):
