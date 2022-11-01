@@ -19,6 +19,7 @@ schema_view = get_schema_view(
 
 
 admin.site.site_header = 'Panel de administración UPF'
+
 urlpatterns = [
     path('', lambda request: HttpResponse("https://www.youtube.com/watch?v=OqSQo2aifAA&ab_channel=AnabelaEspenan", content_type="text/plain"), name='healtchecker'),
     path('admin/', admin.site.urls),
