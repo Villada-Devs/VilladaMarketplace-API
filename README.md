@@ -1,2 +1,2 @@
 # UPFAPI
-api del proyecto final para la upf usando django rest framework
+API creada con Django, python y sql para el proyecto final de septimo año del colegio.
