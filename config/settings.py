@@ -194,13 +194,9 @@ DATABASES = {
         'PORT': '3306',
         #'OPTIONS': {  
         #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES"  
-        #} 
+        #}
     }  
 }
-
-if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-
 
 """
 Internationalization (LANG, TIMEZONE)

@@ -61,3 +61,17 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Profile.objects.filter()
 
+    def listaaaa(self, request):  
+        queryset = Profile.objects.filter()
+        user = request.GET.get('created_by')
+        if user:
+            if str(request.user.id) != user:
+                print(request.user.id, user)
+                return Response({'error' : 'You can not see the pool list from other user'}, status=status.HTTP_401_UNAUTHORIZED)
+            queryset = queryset.filter(created_by=user)
+        
+        serializer = poolsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def list(self, request):
+        user = request.GET.get('created_by')
