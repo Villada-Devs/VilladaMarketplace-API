@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, related_name = 'profile_image')
-    image = models.ImageField(default="https://aaahockey.org/wp-content/uploads/2017/06/default-avatar.png")
+    image = models.ImageField(default="images/default-avatar.png", upload_to="images")
     
     def __str__(self) -> str:
         return f'Perfil de {self.user.username}'

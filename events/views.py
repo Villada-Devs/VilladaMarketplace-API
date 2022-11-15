@@ -5,15 +5,23 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny
 # Create your views here.
+
+from rest_framework import permissions
+
 
 
 class EventsViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+    
     """
     GET (List all events, all users can list)
     """
     
     def list(self, request):
+        
+
        # PAGINATION
         page = request.query_params.get('page')
         
@@ -35,16 +43,21 @@ class EventsViewSet(viewsets.ViewSet):
     POST (Create event only admin can post)
     """   
     def post(self, request):
-        user_state = request.user.is_staff
-        if user_state == True:
-            serializer = EventsSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save(created_by = self.request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
-    
+        #esto de user authenticated aca es redundante porque al consultar el estado de admin ya estas necesitando que el user este logeado
+        #pero sirve para vistar publicas para bloquear el acceso a gente que no esta loggeada
+        if request.user.is_authenticated:
+            user_state = request.user.is_staff
+            if user_state == True:
+                
+                serializer = EventsSerializer(data = request.data)
+                if serializer.is_valid():
+                    serializer.save(created_by = self.request.user)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'error' : 'Authorization Required'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error' : 'You need to be logged in to create an event'}, status=status.HTTP_401_UNAUTHORIZED)
+        
 
 class EventsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EventsSerializer
