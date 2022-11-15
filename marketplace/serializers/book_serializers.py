@@ -47,7 +47,7 @@ class BookSerializer(serializers.ModelSerializer):
     published_date = serializers.DateField(required = False)
 
 
-    imagesbook = ImagesBookSerializer(many=True, read_only =True)
+    images = ImagesBookSerializer(many=True, read_only =True)
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
     
@@ -66,7 +66,7 @@ class BookSerializer(serializers.ModelSerializer):
             'created_by_user',
             'creation_date',
             'published_date',
-            'imagesbook',
+            'images',
             'uploaded_images',
             ] 
 

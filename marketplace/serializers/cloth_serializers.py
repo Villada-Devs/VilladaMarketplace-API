@@ -37,7 +37,7 @@ class ClothSerializer(serializers.ModelSerializer):
 
 
 
-    imagescloth = ImagesClothSerializer(many=True, read_only =True)
+    images = ImagesClothSerializer(many=True, read_only =True)
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # crea un array en donde se van a meter cosas
     
 
@@ -56,7 +56,7 @@ class ClothSerializer(serializers.ModelSerializer):
             'created_by_user',
             'creation_date',
             'published_date',
-            'imagescloth',
+            'images',
             'uploaded_images',
             ] 
 
