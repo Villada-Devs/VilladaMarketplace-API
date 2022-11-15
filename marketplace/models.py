@@ -79,7 +79,7 @@ class Book(Creacion):
 
 class ImagesBook(models.Model):
     image = models.ImageField(upload_to= "images")
-    book = models.ForeignKey('Book',related_name='imagesbook', on_delete=models.CASCADE)
+    book = models.ForeignKey('Book',related_name='product_images', on_delete=models.CASCADE)
 
 
     def _str_(self):
@@ -105,7 +105,7 @@ class Clothing(Creacion):
 
 class ImagesClothing(models.Model):
     image = models.ImageField(upload_to= "images")
-    cloth = models.ForeignKey('Clothing',related_name='imagescloth', on_delete=models.CASCADE)
+    cloth = models.ForeignKey('Clothing',related_name='product_images', on_delete=models.CASCADE)
 
 
     def _str_(self):
@@ -127,7 +127,7 @@ class Tool(Creacion):
 
 class ImagesTool(models.Model):
     image = models.ImageField(upload_to= "images")
-    tool = models.ForeignKey('Tool',related_name='imagestool', on_delete=models.CASCADE)
+    tool = models.ForeignKey('Tool',related_name='product_images', on_delete=models.CASCADE)
 
 
     def _str_(self):

@@ -39,7 +39,7 @@ class ToolSerializer(serializers.ModelSerializer):
     
 
 
-    images = ImagesToolSerializer(many=True, read_only =True)
+    product_images = ImagesToolSerializer(many=True, read_only =True)
     uploaded_images = serializers.ListField(child = serializers.ImageField(max_length = 1000000, allow_empty_file = False, use_url = False), write_only = True) # el listField() crea un array en donde se van a meter los objetos, en este caso las imagenes
 
     
@@ -57,7 +57,7 @@ class ToolSerializer(serializers.ModelSerializer):
             'created_by_user',
             'creation_date',
             'published_date',
-            'images',
+            'product_images',
             'uploaded_images',
             ] 
 
