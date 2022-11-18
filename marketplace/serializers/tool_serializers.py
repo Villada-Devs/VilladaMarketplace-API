@@ -7,6 +7,8 @@ from ..models import ImagesTool, Tool
 class PropsNestedSerializer(serializers.Serializer):
     description = serializers.CharField(required = False, allow_blank= True)
 
+    class Meta:
+        ref_name = "props for tools"
 
 class ImagesToolSerializer(serializers.ModelSerializer):
 
@@ -47,6 +49,7 @@ class ToolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tool
+        ref_name = "tool"
         fields = [
             'id',
             'product_name',

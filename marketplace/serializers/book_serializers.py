@@ -9,7 +9,8 @@ class PropsNestedSerializer(serializers.Serializer):
     course = serializers.ChoiceField(high_school_courses)
     editorial = serializers.CharField(required = False, allow_blank= True)
 
-    
+    class Meta :
+        ref_name = "props for books"
 
 
 class ImagesBookSerializer(serializers.ModelSerializer):
@@ -58,6 +59,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
+        ref_name = "Book"
         fields = [
             'id',
             'product_name',

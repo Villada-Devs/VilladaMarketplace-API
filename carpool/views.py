@@ -54,14 +54,6 @@ class poolsListView(viewsets.ViewSet):
         return Response({'ok' : 'Pool deleted succesfully'}, status=status.HTTP_200_OK)
     
 
-    #CODING (UPDATE )
-    def update(self, request, *args, **kwargs):
-        pool_id= request.query_params.get('id')
-        instance = self.get_object()
-        print(instance)
-
-
-
 class PoolsDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = poolsSerializer
     lookup_field =  "id"

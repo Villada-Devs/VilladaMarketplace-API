@@ -7,7 +7,8 @@ class PropsNestedSerializer(serializers.Serializer):
     size = serializers.ChoiceField(size_clothing)
     description = serializers.CharField(required = False, allow_blank= True)
     
-
+    class Meta: 
+        ref_name = "props for cloth"
 
 class ImagesClothSerializer(serializers.ModelSerializer):
 
@@ -46,6 +47,7 @@ class ClothSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Clothing
+        ref_name = "Clothing"
         fields = [
             'id',
             'product_name',

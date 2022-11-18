@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.google',
     'drf_multiple_model',
     'corsheaders',
-    'phonenumber_field',
+    'phonenumber_field', 
 ]
 
 LOCAL_APPS = [
@@ -207,7 +207,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+SITE_ID = 1
 
 """
 Email Configurations
@@ -218,7 +218,6 @@ EMAIL_HOST_USER = 'fatmailsender2@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
