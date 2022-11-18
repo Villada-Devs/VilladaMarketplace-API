@@ -49,7 +49,8 @@ class ToolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tool
-        ref_name = "Tool"
+        ref_name = "Tool"  # esto es por que tiraba error con la libreria de que documenta la api por que agarra todos los serializer y los 
+                            #compila y tira error que el props se llama igual en tools, cloth y books entonces asi los diferencia
         fields = [
             'id',
             'product_name',
