@@ -49,7 +49,7 @@ class ToolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tool
-        ref_name = "tool"
+        ref_name = "Tool"
         fields = [
             'id',
             'product_name',
